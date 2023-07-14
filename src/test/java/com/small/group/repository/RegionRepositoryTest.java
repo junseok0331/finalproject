@@ -14,7 +14,7 @@ import org.springframework.test.annotation.Commit;
 import com.small.group.entity.Region;
 
 @SpringBootTest
-@EnableJpaAuditing
+
 @Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RegionRepositoryTest {

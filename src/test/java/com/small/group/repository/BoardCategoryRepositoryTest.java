@@ -19,7 +19,7 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-@EnableJpaAuditing
+
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class BoardCategoryRepositoryTest {
 	

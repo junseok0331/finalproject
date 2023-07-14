@@ -16,7 +16,7 @@ import com.small.group.entity.User;
 
 @SpringBootTest
 @Transactional
-@EnableJpaAuditing
+
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserServiceTest {
 

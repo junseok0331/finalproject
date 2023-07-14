@@ -26,7 +26,7 @@ import com.small.group.repository.GroupCategoryRepository;
 
 @SpringBootTest
 @Transactional
-@EnableJpaAuditing
+
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class GroupCategoryServiceTest {
 
