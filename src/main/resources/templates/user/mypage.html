@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/css/mypage.css">  
+    <title>마이페이지</title>
+</head>
+<body>
+	<div th:replace="~{etc/mainContainer::header}"></div>
+	<div class="mypage-container">
+		<h1>My Page</h1>
+		<br><br><br>
+			<h3>기본정보</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" style="width: 1%; font-weight: bold;">아이디</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">이름</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">휴대폰번호</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">회원가입일</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">정보변경</th>
+					</tr>
+				</thead>
+				<tbody>
+	    			<tr th:each="user : ${getUser}">
+	    				<td th:text="${user.userId}"></td>
+	    				<td th:text="${user.name}"></td>
+	    				<td th:text="${user.phone}"></td>
+						<td th:text="${#temporals.format(user.regDate, 'yyyy/MM/dd')}"></td>
+	    				<td>
+	    					<a th:href="@{/user/userModify(userNo=${user.userNo})}">
+	    						<button class="userModifyButton">회원정보수정</button>
+	    					</a>
+	    				</td>
+	    			</tr>
+	    		</tbody>
+			</table>
+			<br><br><br>
+			<h3>내가 가입한 모임</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" style="width: 1%; font-weight: bold;">카테고리</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">모임명</th>
+						<th scope="col" style="width: 1%; font-weight: bold;">가입일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="groupMember : ${groupList}">
+						<td style="text-align: center;">
+							<div class="categoryreg"
+								th:style="'background-color: ' + (${groupMember.groupCategoryNo} == 1 ? 'rgb(225,132,132)' :
+		                        (${groupMember.groupCategoryNo} == 2 ? 'rgb(225,177,132)' :
+		                        (${groupMember.groupCategoryNo} == 3 ? 'rgb(225,221,132)' :
+		                        (${groupMember.groupCategoryNo} == 4 ? 'rgb(132,225,132)' :
+		                        (${groupMember.groupCategoryNo} == 5 ? 'rgb(132,197,225)' :
+		                        (${groupMember.groupCategoryNo} == 6 ? 'rgb(132,175,225)' :
+		                        (${groupMember.groupCategoryNo} == 7 ? 'rgb(173,132,225)' :
+		                        'rgb(120,120,120)')))))) + ';')">
+		                        <div class="카테고리1" th:text="${groupMember.groupCategoryName}"></div>
+							</div>
+						</td>
+						<td><a
+		                    th:href="@{/group/groupMain(groupNo=${groupMember.groupNo})}">
+		                        [[${groupMember.groupName}]] </a></td>
+		                <td th:text="${#temporals.format(groupMember.regDate, 'yyyy/MM/dd')}"></td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+</body>
+</html>

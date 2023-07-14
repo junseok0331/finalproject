@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+ <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>게시판 - [[${board.boardTitle}]]</title>
+	<link rel="stylesheet" th:href="@{/css/board/css.css}">
+	
+	<link rel="stylesheet" href="/css/main/mainHeader.css"> 
+    <link rel="stylesheet" href="/css/main/groupMainHeader.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(document).ready(function() {
+		
+		// 게시물 삭제 클릭 처리 이벤트
+		function confirmDelete(event) {
+	    //event.preventDefault();
+	    var confirmMessage = "정말로 삭제하시겠습니까?";
+	    if (confirm(confirmMessage)) {
+	        var deleteForm = document.getElementById("deleteForm");
+	        deleteForm.style.display = "block";
+	        deleteForm.submit();
+		    }
+		}
+		
+		
+		// 댓글 등록 클릭 처리 이벤트
+		$('#comment-ins-Btn').on('click', function(event){
+			var boardNo = document.getElementById('boardNo').value;
+			var userNo = document.getElementById('userNo').value;
+			var commentContent = document.getElementById('commentContent').value;
+			var formData = {"boardNo": boardNo,
+							"userNo": userNo,
+							"commentContent": commentContent,
+							};
+			
+			if (commentContent.trim() == '') {
+				alert("내용을 입력하세요.");
+				return;
+			}
+			$.ajax({
+				url: '/board/commentInsert',
+				type: 'POST',
+				data: JSON.stringify(formData),
+				contentType: 'application/json',
+				success: function(result) {
+					if (result === 'success') {
+		                window.location.href = '/board/boardRead?boardNo='+boardNo;
+		            }
+				},
+	        	error: function(xhr, status, error) {
+	        		console.error('ajax 요청 실패: ', error);
+	        	}
+			});
+		});		
+		
+		// 댓글 삭제 클릭 이벤트 처리
+		$(document).on('click', '.comment-del-Btn', function(){
+		    var commentNo = $(this).prev().val();
+		    var boardNo = $('#boardNo').val();
+
+		    // 삭제 확인 메시지 표시
+		    var confirmMessage = "정말로 삭제하시겠습니까?";
+		    if (confirm(confirmMessage)) {
+		        $.ajax({
+		            url: '/board/commentDelete',
+		            type: 'POST',
+		            data: JSON.stringify(commentNo),
+		            contentType: 'application/json',
+		            success: function(result) {
+		                if (result === 'success'){
+		                    window.location.href = '/board/boardRead?boardNo='+boardNo;
+		                }
+		            },
+		            error: function(xhr, status, error) {
+		                console.error('ajax 요청 실패: ', error);
+		            }
+		        });
+		    }
+		});
+	
+	})
+	</script>
+ </head>
+ <body>
+ 	<div th:replace="~{etc/mainContainer::header}"></div>
+	<div th:replace="~{etc/groupMainHeader::header}"></div>
+    <div class="board_wrap">
+      
+      <div layout:fragment="content" class="container my-3">
+      	  <h1 class="board_title" th:text="${board.boardCategoryName}">Board Category Name</h1>
+	  </div>
+	  
+	  <div class="board_read_wrap">
+	  		<div class="board_read">
+	  			<div class="title" th:text="${board.boardTitle}">
+	  				Board Title
+	  			</div>
+	  			
+	  			<div class="info">
+	  				<dl>
+	  					<dt>게시판 NO</dt>
+	  					<dd th:text="${board.boardNo}"></dd>
+	  				</dl>
+	  				<dl>
+	  					<dt>게시판/말머리</dt>
+	  					<dd th:text="${board.boardCategoryName}"></dd>
+	  				</dl>
+	  				<dl>
+	  					<dt>작성자</dt>
+	  					<dd th:text="${board.userName}"></dd>
+	  				</dl>
+	  				<dl>
+	  					<dt>조회</dt>
+	  					<dd th:text="${board.boardHit}"></dd>
+	  				</dl>
+	  				<dl>
+	  					<dt>작성일</dt>
+	  					<dd th:text="${#temporals.format(board.regDate, 'yyyy/MM/dd')}"></dd>
+	  				</dl>
+	  				<dl>
+	  					<dt>수정일</dt>
+	  					<dd th:text="${#temporals.format(board.modDate, 'yyyy/MM/dd')}"></dd>
+	  				</dl>
+	  			</div>
+	  			
+				<div class="content" th:text="${board.boardContent}">
+					Board Content
+				</div>
+	  		</div>
+	    <br>
+    	<br>  		
+			<div class="btn_wrap">
+		        <a th:href="@{/board/boardList(groupNo = ${board.groupNo})}" class="on">
+		            목록
+		        </a>
+		        <a th:if="${showButton}" th:href="@{/board/boardModify(boardNo = ${board.boardNo})}" class="on">
+		            수정
+		        </a>       
+	            <a th:if="${showButton}" th:href="@{/board/boardDelete/{boardNo}(boardNo=${board.boardNo}, groupNo=${board.groupNo})}" onclick="return confirm('정말로 삭제하시겠습니까?');" class="on">
+	            	삭제
+	            </a>
+			</div>
+		</div>
+	</div>
+    	<div class="board_comment_wrap">
+    	
+	      <div layout:fragment="content" class="container my-3">
+	      	  <h2 class="board_comment_title">댓글</h2>
+		  </div>
+    		
+	    	<div class="board_read_comment_wrap">
+	    		<div class="board_read_comment">
+		    		<textarea class="commentContent" id="commentContent" name="commentContent" placeholder="댓글 내용을 입력하세요." style="text-align: left; padding-left: 5px;"></textarea>
+		    		<input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}">
+		    		<input type="hidden" id="userNo" name="userNo" th:value="${session.user.userNo}">
+		    		<button class="comment-ins-Btn" id="comment-ins-Btn">등록</button>
+			  </div>
+			    <div th:if="${commentList != null}">   
+				    <table class="comment_info">
+				    	<thead>
+				    		<tr>
+				    			<th width="">작성자</th>
+				      			<th width="">댓글</th>
+				      			<th width="15%">등록일</th>
+				      			<th width="">  </th>
+				   			</tr>
+				        </thead>
+				        <tbody class="comment_info_value">
+				        	<tr th:each="comment : ${commentList}">
+				        		<td th:text="${comment.userName}"></td>
+				        		<td th:text="${comment.commentContent}"></td>
+				        		<td th:text="${#temporals.format(comment.regDate, 'yyyy/MM/dd HH:mm')}"
+		                    			style="text-align: center;"></td>
+		                    	<td th:if="${session.user.userNo == comment.userNo}">
+		                    		<input type="hidden" id="commentNo" th:name="'commentNo-' + ${comment.commentNo}" th:value="${comment.commentNo}">
+		                    		<button class="comment-del-Btn">삭제</button>
+		                    	</td>
+		                    	<td th:unless="${session.user.userNo == comment.userNo}"></td>
+				        	</tr>
+						</tbody>
+					</table>
+			    </div>
+			    <div th:unless="${commentList != null}">
+			    	<table>
+			    		<tr>
+			    			<th>등록된 댓글이 없습니다.</th>
+			    		</tr>
+			    	</table>
+			    </div>
+			 </div>   
+	   </div>
+ </body>
+</html>

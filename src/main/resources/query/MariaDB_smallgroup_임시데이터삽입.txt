@@ -1,0 +1,73 @@
+
+INSERT INTO tbl_user(name ,password ,phone, user_id, mod_date, reg_date)
+VALUES ('홍길동','1234','010-1234-5678','서해번쩍', now(), now());
+INSERT INTO tbl_user(name ,password ,phone, user_id, mod_date, reg_date)
+VALUES ('김자바','5678','010-5678-1234','자바스터디', now(), now());
+INSERT INTO tbl_user(name ,password ,phone, user_id, mod_date, reg_date)
+VALUES ('이모임','7418','010-3358-1784','모임가입희망이', now(), now());
+
+INSERT INTO tbl_region(region_name) VALUES('안산시');
+INSERT INTO tbl_region(region_name) VALUES('수원시');
+INSERT INTO tbl_region(region_name) VALUES('안양시');
+INSERT INTO tbl_region(region_name) VALUES('성남시');
+INSERT INTO tbl_region(region_name) VALUES('용인시');
+INSERT INTO tbl_region(region_name) VALUES('고양시');
+INSERT INTO tbl_region(region_name) VALUES('부천시');
+INSERT INTO tbl_region(region_name) VALUES('남양주시');
+INSERT INTO tbl_region(region_name) VALUES('화성시');
+INSERT INTO tbl_region(region_name) VALUES('평택시');
+INSERT INTO tbl_region(region_name) VALUES('의정부시');
+
+INSERT INTO tbl_group_category(group_category_name) VALUES('문화/예술');
+INSERT INTO tbl_group_category(group_category_name) VALUES('운동');
+INSERT INTO tbl_group_category(group_category_name) VALUES('맛집');
+INSERT INTO tbl_group_category(group_category_name) VALUES('여행');
+INSERT INTO tbl_group_category(group_category_name) VALUES('자기계발');
+INSERT INTO tbl_group_category(group_category_name) VALUES('친목');
+INSERT INTO tbl_group_category(group_category_name) VALUES('소개팅');
+INSERT INTO tbl_group_category(group_category_name) VALUES('자유');
+
+INSERT INTO tbl_group(group_description, group_name, mod_date, reg_date, group_category_no, region_no, user_no)
+VALUES('자바개발스터디', '자바스터디그룹', now(), now(), 5, 1, 1);
+INSERT INTO tbl_group(group_description, group_name, mod_date, reg_date, group_category_no, region_no, user_no)
+VALUES('박물관 탐방 모임', '유적지를보아라',  now(), now(), 1, 2, 2);
+INSERT INTO tbl_group(group_description, group_name, mod_date, reg_date, group_category_no, region_no, user_no)
+VALUES('여행을 좋아하는 분들을 모집합니다.', '여행을떠나라', now(), now(),  4, 3, 3);
+
+INSERT INTO tbl_group_member(group_no, user_no, mod_date, reg_date)
+VALUES(1, 1, now(), now());
+INSERT INTO tbl_group_member(group_no, user_no, mod_date, reg_date)
+VALUES(2, 2, now(), now());
+INSERT INTO tbl_group_member(group_no, user_no, mod_date, reg_date)
+VALUES(3, 3, now(), now());
+
+INSERT INTO tbl_board_category(board_category_name) VALUES('공지사항');
+INSERT INTO tbl_board_category(board_category_name) VALUES('가입인사');
+INSERT INTO tbl_board_category(board_category_name) VALUES('자유글');
+
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[자바스터디]공지사항내용1',0,'[자바스터디]공지사항제목1',1,1,1, now(), now());
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[자바스터디]가입인사입니다2.',0,'[자바스터디]가입인사제목2',2,1,3, now(), now());
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[유적지를보아라]공지사항내용1',0,'[유적지를보아라]공지사항제목1',1,2,2, now(), now());
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[유적지를보아라]가입인사입니다2.',0,'[유적지를보아라]가입인사제목2',2,2,1, now(), now());
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[여행을떠나라]공지사항내용1',0,'[여행을떠나라]공지사항제목1',1,3,3, now(), now());
+INSERT INTO tbl_board (board_content , board_hit , board_title , board_category_no, group_no , user_no, mod_date, reg_date )
+VALUES ('[여행을떠나라]가입인사입니다2.',0,'[여행을떠나라]가입인사제목2',2,3,2, now(), now());
+
+INSERT INTO tbl_chat(chat_content, group_no, user_no, mod_date, reg_date)
+VALUES('자바스터디_채팅방1', 1, 1, now(), now());
+INSERT INTO tbl_chat(chat_content, group_no, user_no, mod_date, reg_date)
+VALUES('유적지를보아라_채팅방2', 2, 2, now(), now());
+INSERT INTO tbl_chat(chat_content, group_no, user_no, mod_date, reg_date)
+VALUES('여행을떠나라_채팅방3', 3, 3, now(), now());
+
+INSERT INTO tbl_comment (comment_content, board_no, user_no, mod_date, reg_date)
+VALUES('모임가입희망이님 [자바스터디] 가입을 환영합니다.', 2, 1, now(), now());
+INSERT INTO tbl_comment (comment_content, board_no, user_no, mod_date, reg_date)
+VALUES('서해번쩍님 [유적지를보아라]가입을 환영합니다.', 4, 2, now(), now());
+INSERT INTO tbl_comment (comment_content, board_no, user_no, mod_date, reg_date)
+VALUES('자바스터디님 [여행을떠나라]가입을 환영합니다.', 6, 3, now(), now());

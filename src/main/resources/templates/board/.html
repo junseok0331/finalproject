@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout2}">
+    <div layout:fragment="content" class="container my-3">
+        <h1 class="mt-4">Board Details</h1>
+        
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>게시판 NO:</th>
+                    <td th:text="${board.boardNo}"></td>
+                </tr>
+                <tr>
+                    <th>게시판 제목:</th>
+                    <td th:text="${board.boardTitle}"></td>
+                </tr>
+                <tr>
+                    <th>게시판 내용:</th>
+                    <td th:text="${board.boardContent}"></td>
+                </tr>
+                <tr>
+                    <th>게시판 조회수:</th>
+                    <td th:text="${board.boardHit}"></td>
+                </tr>
+                <tr>
+                    <th>카테고리 No:</th>
+                    <td th:text="${board.boardCategoryNo}"></td>
+                </tr>
+                <tr>
+                    <th>카테고리 이름:</th>
+                    <td th:text="${board.boardCategoryName}"></td>
+                </tr>
+                <tr>
+                    <th>그룹 No:</th>
+                    <td th:text="${board.groupNo}"></td>
+                </tr>
+                <tr>
+                    <th>유저 No:</th>
+                    <td th:text="${board.userNo}"></td>
+                </tr>
+                <tr>
+                    <th>유저 이름:</th>
+                    <td th:text="${board.userName}"></td>
+                </tr>
+                <tr>
+                    <th>게시판 생성일:</th>
+                    <td th:text="${#temporals.format(board.regDate, 'yyyy/MM/dd')}"></td>
+                </tr>
+                <tr>
+                    <th>게시판 수정일:</th>
+                    <td th:text="${#temporals.format(board.modDate, 'yyyy/MM/dd')}"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a th:href="@{/board/boardList}">
+            <button type="button" class="btn btn-outline-primary">Back to List</button>
+        </a>
+        <a th:href="@{/board/boardModify(boardNo = ${board.boardNo})}">
+            <button type="button" class="btn btn-outline-success">Modify</button>
+        </a>       
+		<a th:href="@{/board/boardDelete/{boardNo}(boardNo=${board.boardNo})}">
+		    <button type="button" class="btn btn-outline-warning">Delete</button>
+		</a>
+    
+        
+    </div>
+</html>

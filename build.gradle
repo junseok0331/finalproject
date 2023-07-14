@@ -1,0 +1,56 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.13'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.small'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	// 타임리프 레이아웃 관련 의존성
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' 
+	
+	// SQL 로그  	
+  	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+  	
+  	// Validation
+  	implementation group: 'org.springframework.boot', 
+  						name: 'spring-boot-starter-validation', version: '2.5.6'
+  						
+  	// commons 라이브러리의 IOUtils 가져오기 위한 의존성 추가 20230712
+	implementation 'commons-io:commons-io:2.11.0'
+	
+	// Thumbnail
+    // 리사이징 없이 업로드 된 이미지의 경우 너무 사이즈가 크다보니 이를 그대로 서비스하다보면 보는 사용자가 제공하는 서버나 둘다 필요없는 시간낭비, 트래픽 낭비를 초래 방지
+    // 요약 :  썸네일 이미지 깨짐 방지
+	implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.17'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

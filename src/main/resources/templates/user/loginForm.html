@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/css/loginForm.css">
+<title>Login</title>
+</head>
+<body>
+	<div id="screenLeft" class="minitite">
+		<h4>우리집 앞 소모임을 찾는다면?</h4>
+		<h1>RE! crew</h1>
+	</div>
+	<form id="loginForm" th:action="@{/user/login}" method="post">
+		<div>
+			<label class="labelId" for="userId">ID</label> <input type="text"
+				id="userId" name="userId" class="inputId" placeholder="아이디" />
+		</div>
+		<div>
+			<label class="labelPwd" for="password">Password</label> <input
+				type="password" id="password" name="password" class="inputPwd"
+				placeholder="비밀번호" />
+		</div>
+		<div id="errorMsg" style="color: red;"></div>
+		<button class="loginBtn" type="submit">Login</button>
+		<a class="regBtn" th:href="@{/user/register}">회원가입</a>
+	</form>
+	
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+        $(document).ready(function() {
+            $('#loginForm').submit(function(event) {
+                event.preventDefault(); // 폼 기본 동작 중단
+
+                var formData = {
+                    "userId": $('#userId').val(),
+                    "password": $('#password').val()
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/login',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    success: function(result) {
+                        if (result === 'success') {
+                            window.location.href = '/';
+                        } else {
+                            $('#errorMsg').text('잘못된 아이디 또는 비밀번호입니다.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

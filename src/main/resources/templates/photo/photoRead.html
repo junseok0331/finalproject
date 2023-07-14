@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo 상세페이지</title>
+    <style>
+        .photo-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Photo 상세페이지</h1>
+    <div id="photoContainer">
+        <img class="photo-image" src="{photoImageUrl}" alt="Photo">
+    </div>
+    <div id="photocommentContainer">
+        <!-- 댓글을 동적으로 추가할 부분 -->
+    </div>
+    <form id="photocommentForm">
+        <textarea id="photoCommentContent" name="photoCommentContent" required></textarea><br>
+        <button type="submit">댓글 등록</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 페이지 로딩 시 사진 정보와 댓글을 가져와서 보여주는 작업 수행
+            fetchPhotoDetail();
+
+            function fetchPhotoDetail() {
+                var photoNo = {photoNo};  // 동적으로 사진 번호를 할당해야 함
+                $.ajax({
+                    url: '/getPhotoRead/' + photoNo,
+                    type: 'GET',
+                    success: function(response) {
+                        // 사진 정보와 댓글을 화면에 보여주는```javascript
+                        var photo = response.photo;
+                        var comments = response.comments;
+
+                        // 사진 정보 표시
+                        var photoContainer = $('#photoContainer');
+                        photoContainer.find('.photo-image').attr('src', photo.imageUrl);
+
+                        // 댓글 목록 표시
+                        var commentContainer = $('#commentContainer');
+                        commentContainer.empty();
+                        for (var i = 0; i < comments.length; i++) {
+                            var comment = comments[i];
+                            var commentItem = $('<div></div>');
+                            commentItem.text(comment.commentContent);
+                            commentContainer.append(commentItem);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error fetching photo detail: ' + error);
+                    }
+                });
+            }
+
+            // 댓글 작성 폼 제출 처리
+            $('#commentForm').submit(function(event) {
+                event.preventDefault();
+                var commentContent = $('#commentContent').val();
+                var photoNo = {photoNo};  // 동적으로 사진 번호를 할당해야 함
+                $.ajax({
+                    url: '/addComment',
+                    type: 'POST',
+                    data: {
+                        photoNo: photoNo,
+                        commentContent: commentContent
+                    },
+                    success: function(response) {
+                        // 댓글 추가 성공 시, 화면에 댓글을 추가하는 작업 수행
+                        var commentContainer = $('#commentContainer');
+                        var commentItem = $('<div></div>');
+                        commentItem.text(commentContent);
+                        commentContainer.append(commentItem);
+                        $('#commentContent').val('');  // 댓글 입력 필드 초기화
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error adding comment: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

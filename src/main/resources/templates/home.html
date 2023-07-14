@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<link rel="stylesheet" href="/css/main/searchHeader.css"> 
+<title>메인 페이지</title>
+
+</head>
+<body>
+
+	<!-- 검색창 포함 헤더 -->
+	<div th:replace="~{etc/searchHeader::header}"></div>
+
+   <div class="banner-container">
+        <div class="banner-slide">
+            <img src="/image/ad/ad1.png" alt="Ad 1" class="banner-image">
+            <img src="/image/ad/ad2.png" alt="Ad 2" class="banner-image">
+        </div>
+
+    </div>
+
+	<div class="category-container-col-4">
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=4)}" > 
+                    <img src="/image/travelcategory.png" alt="Travel Category" />
+                </a> 
+                <span class="categoryName">여행</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=8)}" >
+                    <img src="/image/etccategory.png" alt="ect category" />
+                </a> 
+                <span class="categoryName">자유</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=7)}" >
+                    <img src="/image/blinddate.png" alt="blind date" />
+                </a> 
+                <span class="categoryName">소개팅</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=5)}" >
+                    <img src="/image/selfdevelopement.png" alt="selfdevelopement" />
+                </a> 
+                <span class="categoryName">자기계발</span>
+            </div>
+        </div>
+        <div class="category-container-col-4">
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=6)}" >
+                    <img src="/image/amity.png" alt="amity" />
+                </a> 
+                <span class="categoryName">친목</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=1)}" > 
+                    <img src="/image/culture.png" alt="cultruebox" />
+                </a> 
+                <span class="categoryName">문화/예술</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=2)}" > 
+                    <img src="/image/exercise.png" alt="exercisebox" />
+                </a> 
+                <span class="categoryName">운동</span>
+            </div>
+
+            <div class="categoryButtonContainer">
+                <a class="categoryIcon" th:href="@{/group/groupList(groupCategoryNo=3)}" > 
+                    <img src="/image/restaurant.png" alt="restaurantbox" />
+                </a> 
+                <span class="categoryName">맛집</span>
+            </div>
+        </div>
+
+	<br><br><br><br><br>
+	<div class="groupList-container">
+		<p class="groupInfo">새로 개설된 모임이에요!</p>
+
+		<br>
+		<!-- 각 그룹마다 반복하며 링크를 생성 -->
+		<div th:each="group : ${result.dtoList}" class="groupReg">
+			<div class="groupTitle">
+				<a th:href="@{/group/groupMain(groupNo=${group.groupNo})}"
+					style="font-size: min(2.6vw, 26px);" th:text="${group.groupName}"></a>
+			</div>
+
+			<div class="regionInfo">
+				<img src="/image/regionIcon.png" alt="regionIcon" class="regionIcon" />
+				<p class="groupRegion" th:text="${group.regionName}"></p>
+			</div>
+			<a class="join-shape"
+				th:href="@{/group/groupMain(groupNo=${group.groupNo})}">가입하기</a>
+		</div>
+	</div>
+
+	<script>
+        // 배너 이미지 슬라이드
+        const bannerImages = document.querySelectorAll('.banner-image');
+        let currentImageIndex = 0;
+
+        function showImage(index) {
+            bannerImages.forEach((image, i) => {
+                if (i === index) {
+                    image.style.opacity = '1';
+                } else {
+                    image.style.opacity = '0';
+                }
+            });
+        }
+
+        function showNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
+            showImage(currentImageIndex);
+        }
+
+        setInterval(showNextImage, 5000);
+    </script>
+
+</body>
+</html>

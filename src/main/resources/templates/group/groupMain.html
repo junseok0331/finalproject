@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/main/mainHeader.css">
+<link rel="stylesheet" href="/css/groupIntroduce.css">
+<link rel="stylesheet" href="/css/main/groupMainHeader.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap"
+	rel="stylesheet">
+<style>
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+</style>
+<title>Document</title>
+</head>
+<body>
+	<div th:replace="~{etc/mainContainer::header}"></div>
+    <div th:replace="~{etc/groupMainHeader::header}"></div>
+
+    <div class="group-main-container">
+    	<div id="visibleImgButton">
+        </div>
+		<div class="group-main-img-button" id="imageRegisterButton">
+          <h3>배경 이미지 등록</h3>
+        </div>
+        <div class="group-main-noimage" id="noBackgroundImage">
+        	<h3>배경 이미지가 존재하지 않습니다.</h3>
+        </div>
+        <input type="file" id="imageInput" class="hidden-input">
+        <div class="description-container">
+            <h3 class="group-title">Description</h3>
+            <div class="description" th:utext="${group.groupDescription}">
+            </div>
+        </div>
+        <div class="schedule-container">
+          <h3 class="schedule-title">Schedule</h3>
+          <div class="none-schedule" id="noneSchedule">
+          	<span>현재 일정이 없습니다.</span>
+          </div>
+          <div class="schedule">
+          </div>
+        </div>
+
+        <div class="group-member-container">
+          <h3 class="group-member-title">Group Member</h3>
+          <div class="group-member-list"> <!-- 해당 class 이름으로 엘리먼트를 가져와 추가한다. -->
+          </div>
+        </div>
+        <div class="group-buttons">
+        	<a id="joinButton" th:href="@{/group/join(groupNo=${groupNo})}"
+        		onclick="return confirm('모임에 가입하시겠습니까?');">
+        		<button class="join-button">가입하기</button>
+        	</a>
+        	<a id="leaveButton" th:href="@{/group/deleteJoin(groupNo=${groupNo})}"
+	        	onclick="return confirm('모임을 탈퇴하시겠습니까?');">
+	        	<button class="leave-button">탈퇴하기</button>
+	    	 </a>
+	    	 <a th:if="${isMemberGroupLeader}" id="modifyButton" th:href="@{/group/groupModify(groupNo=${groupNo})}">
+	        	<button class="leave-button">수정하기</button>
+	    	 </a>
+	    	 <a th:if="${isMemberGroupLeader}" id="deleteButton" th:href="@{/group/groupDelete/{groupNo}(groupNo=${groupNo})}"
+              onclick="return confirm('정말로 모임을 삭제하시겠습니까?');">
+              <button class="delete-button">삭제하기</button>
+           </a>
+        </div>
+    </div>
+    
+    <!-- 모달 창 관련 -->
+    <dialog class="schedule-modal" id="schedule-modal">
+    	<h3 id="schedule-name">일정 등록</h3>
+    	<form id="scheduleInsertForm" th:action="@{/schedule/insertSchedule(groupNo=${groupNo})}" method="POST">
+		    <div class="form-input">
+		    	<label>제목</label>
+	      		<input type="text" id="scheduleName" name="scheduleName">
+		    </div>
+		    <div class="form-input">
+		    	<label>일자</label>
+	      		<input type="date" id="scheduleDate" name="scheduleDate">
+		    </div>
+		    <div class="form-input">
+		    	<label>시간</label>
+	      		<input type="time" id="scheduleTime" name="scheduleTime">
+		    </div>
+		    <div class="form-input">
+		    	<label>설명</label>
+	      		<textarea id="scheduleLocation" name="scheduleLocation"></textarea>
+		    </div>
+		    <div class="form-button">
+		    	<button id="schedule-submit" class="schedule-submit" type="submit">등록</button>
+		    	<button class="close-modal">취소</button>
+		    </div>
+		    
+    	</form>
+    </dialog>
+    
+    <!-- 모달 관련 스크립트 -->
+    <script>
+    	function modalAddEventCheck() {
+    		const modal = document.querySelector('.schedule-modal');
+           	const openModal = document.querySelector('.schedule-button');
+           	const closeModal = document.querySelector('.close-modal');
+           	const scheduleInsertForm = document.getElementById('scheduleInsertForm');
+           	const scheduleSubmitButton = document.getElementById('schedule-submit');
+           	
+           	/* 일정을 추가하는 버튼이 없는 경우에는 실행하지 않음 */
+           	if(openModal != null) {
+           		openModal.addEventListener('click', () => {
+               		modal.showModal();
+               	})
+           	}
+           	
+           	closeModal.addEventListener('click', (event) => {
+           		event.preventDefault();
+           		modal.close();
+           	})
+           	
+           	scheduleSubmitButton.addEventListener('click', (event) => {
+           		event.preventDefault();
+           		const scheduleName = document.getElementById('scheduleName');
+           		const scheduleDate = document.getElementById('scheduleDate');
+           		const scheduleTime = document.getElementById('scheduleTime');
+           		const scheduleLocation = document.getElementById('scheduleLocation');
+           		
+           		if(scheduleName.value === "" || scheduleName.value === null) {
+           			alert('제목을 입력하세요.');
+           			scheduleName.focus();
+           			return;
+           		}
+           		
+           		if(scheduleDate.value === "" || scheduleDate.value === null) {
+           			alert('일자를 설정해주세요.');
+           			scheduleDate.focus();
+           			return;
+           		}
+           		
+           		if(scheduleTime.value === "" || scheduleTime.value === null) {
+           			alert('시간을 설정해주세요.');
+           			scheduleTime.focus();
+           			return;
+           		}
+           		
+           		if(scheduleLocation.value === "" || scheduleLocation.value === null) {
+           			alert('설명 내용을 작성해주세요.');
+           			scheduleLocation.focus();
+           			return;
+           		}
+           		if(confirm('일정을 등록하시겠습니까?')) {
+           			alert('일정이 등록되었습니다.');
+           			scheduleInsertForm.submit();
+           		}
+           		
+           	})
+    	}
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+ 	  	const imageRegisterButton = document.getElementById('imageRegisterButton'); // "배경 이미지를 등록하세요"
+ 	  	const imageInput = document.getElementById('imageInput'); // 실제 이미지 등록 INPUT
+ 	  	const noImageDiv = document.getElementById('noBackgroundImage'); // 이미지가 없을 때 나오는 DIV
+ 	  	const visibleImgButton = document.getElementById('visibleImgButton'); // 숨겨져 있는 버튼을 나타내도록 하는 DIV
+ 	  	
+ 	  	
+ 	  	var groupNo = "[[${groupNo}]]";
+ 	  	var readerUserNo = "[[${readerUserNo}]]";
+ 	  	var sessionUserNo = "[[${sessionUserNo}]]";
+ 	  	let imagePath = 'src/main/resources/static/image/groupMain/' + 'main_image_group_' + groupNo + '.'; 
+	  	
+ 	  	imageRegisterButton.addEventListener('click', () => imageInput.click());
+ 	  	imageInput.addEventListener('change', () => handleFileSelection(event));
+	  	
+ 	  	/* 모든 문서가 조회되면.. */
+ 	  	$(document).ready(function() {
+     		scheduleCheck(); // 그룹에 대한 일정 체크
+     		groupMemberCheck(); // 그룹에 가입한 멤버 리스트 체크
+     		
+    		// userExists : 세션에 접속한 회원이 모임에 가입되어 있는지 여부
+     		const userExists = "[[${userExists}]]";
+     		const isMemberGroupLeader = "[[${isMemberGroupLeader}]]";
+    		
+     		const joinButton = document.getElementById('joinButton');
+     		const leaveButton = document.getElementById('leaveButton');
+     		const deleteButton = document.getElementById('deleteButton');
+     		
+     		if(userExists === "true") {
+     			joinButton.style.display = "none";
+     			leaveButton.style.display = "block";
+     			if(isMemberGroupLeader === "true") {
+     				leaveButton.style.display = "none";
+     			}
+     			visibleImgButton.classList.add('visible-button');
+     		} else {
+     			joinButton.style.display = "block";
+     			leaveButton.style.display = "none";
+     		}
+     		
+     		/* 
+     			외부 경로의 이미지는 보안상의 이유로 해당 경로를
+     			그대로 사용할 수가 없음.
+     			
+     			그로므로 컨트롤러에서 해당 경로의 이미지를 페이지에서
+     			사용 가능한 데이터 형태로 변환하여 img 엘리먼트를 생성하고
+     			src 값을 설정하여 페이지에 추가함.
+     		*/
+     		var mainImageExists = "[[${mainImageExists}]]";
+     		
+     		if(mainImageExists === "true") {
+     			const img = document.createElement('img');
+         		img.classList.add('group-main-img');
+         		img.setAttribute('src', '/image/loadImage/groupMain?groupNo=' + groupNo);
+         		img.setAttribute('id', 'previewImage');
+         		
+         		const imgChangeBtn = document.createElement('button');
+         		imgChangeBtn.classList.add('img-change-button');
+         		imgChangeBtn.innerText = '이미지 변경';
+         		imgChangeBtn.addEventListener('click', () => imageInput.click());
+         		
+         		visibleImgButton.appendChild(img);
+         		visibleImgButton.appendChild(imgChangeBtn);
+     		}
+     		
+			
+     		
+     		/* 메인 이미지가 경로에 존재하지 않을 때 */
+     		if(mainImageExists === "false") {
+     			/* 현재 로그인 한 회원이 모임원인 경우 */
+     			if(userExists === "false") {
+         			noImageDiv.style.display = "block"; // 이미지가 없을 때 나타나는 화면 보여주기
+     			} else if(userExists === "true") {
+     				imageRegisterButton.style.display = "block";
+     			}
+     		}
+     	});
+    	
+	  	
+ 	  	// 파일이 변경되면 이미지를 폴더에 저장하고 이미지를 변경해주는 함수
+ 	  	function handleFileSelection(event) {
+ 	  		const reader = new FileReader();
+ 	  		let file = event.target.files[0];
+ 	  		let filename = file.name;
+	  		
+ 	  		let lastDot = filename.lastIndexOf('.') + 1;
+ 	  		let fileExtension = filename.substring(lastDot, filename.length);
+	  		
+ 	  		// 이미지 확장자 검증
+ 	  		let pictureExtensions = ['jpg', 'png', 'gif', 'jpeg'];
+ 	  		if(pictureExtensions.includes(fileExtension)) {
+ 	  			console.log('해당 확장자는 이미지 파일입니다.');
+ 	  			reader.readAsDataURL(file);
+ 	  		} else {
+ 	  			console.log('해당 파일은 이미지가 아닙니다.');
+ 	  			return;
+ 	  		}
+	  		
+ 	  		reader.onload = function(event) {
+ 	  			const imageData = event.target.result;
+ 	  			const fileName = 'main_image_group_' + groupNo + '.' + fileExtension;
+ 	  			saveImageAndRedirect(imageData, fileName, groupNo);
+ 	  		};
+ 	  	}
+	  	
+ 	  	// 사진 base64String 문자열을 전달해서 새로운 이름으로 이미지를 저장하고 리프레쉬
+ 	  	function saveImageAndRedirect(imageData, fileName, groupNo) {
+ 	  		var formData = {
+ 	  				imageData: imageData,
+ 	  				fileName, fileName,
+ 	  				groupNo: groupNo,
+ 	  		}
+ 	  		
+ 	  		var form = document.createElement('form');
+ 	  		form.setAttribute('method', 'post');
+ 	  		form.setAttribute('action', '/image/saveImage');
+ 	  		form.setAttribute('id', 'imageSaveForm');
+ 	  		
+ 	  		for(var key in formData) {
+ 	  			var hiddenField = document.createElement('input');
+ 	  			hiddenField.setAttribute('type', 'text');
+ 	  			hiddenField.setAttribute('name', key);
+ 	  			hiddenField.setAttribute('value', formData[key]);
+ 	  			form.appendChild(hiddenField);
+ 	  		}
+ 	  		var mainDiv = document.querySelector('.group-main-container');
+ 	  		mainDiv.appendChild(form);
+ 	  		console.log('mainDiv',mainDiv);
+ 	  		var imageSaveForm = document.getElementById('imageSaveForm');
+ 	  		imageSaveForm.submit();
+ 	  		
+ 	  	}
+ 	 	 
+ 	 /* 모임에 기록된 일정이 있는지 여부에 따라서 화면에 표시 */
+ 	 function scheduleCheck() {
+ 		 const schedule = document.querySelector('.schedule');
+ 		 const scheduleContainer = document.querySelector('.schedule-container');
+ 		 const noneSchedule = document.getElementById('noneSchedule');
+ 		 
+ 		 var groupNo = "[[${groupNo}]]";
+ 		 var isMemberGroupLeader = "[[${isMemberGroupLeader}]]"
+ 		 
+ 		 $.ajax({
+ 			 url: '/schedule/scheduleList',
+ 			 type: 'GET',
+ 			 data: { "groupNo" : groupNo },
+ 			 contentType: 'application/json',
+ 			 success: function(response) {
+ 				 const scheduleList = response;
+ 				 var addHeight = 0;
+ 				 
+ 				 /* 그룹의 일정 개수만큼 일정 엘리먼트를 생성하여 스케줄 엘리먼트에 추가 */
+ 				 for(var i=0; i<scheduleList.length; i++) {
+ 					var scheduleData = scheduleList[i];
+ 					var scheduleNo = scheduleList[i].scheduleNo; /* 일정의 기본키 할당 */
+ 					var scheduleInfo = getScheduleInfo(scheduleData, scheduleNo);
+ 					
+ 					
+ 					schedule.appendChild(scheduleInfo);
+ 					addHeight += 265; // 일정 정보 엘리먼트의 높이 + 하단 마진
+ 				 }
+ 				 
+ 				 /* 일정의 길이가 3개 이하인 경우에만 새로운 일정 추가 버튼 생성 */
+ 				 if(scheduleList.length < 3 && isMemberGroupLeader === "true") {
+ 					var scheduleButton = getScheduleButton();
+ 					schedule.appendChild(scheduleButton);
+ 					addHeight += 115; // 일정 입력 버튼의 높이 + 하단 마진
+ 				 /* 일정 목록이 존재하지 않고 현재 회원이 모임원이면 */
+ 				 } else if(scheduleList.length < 1 && isMemberGroupLeader === "false") {
+ 					addHeight += 115;
+ 					noneSchedule.style.display = "block";
+ 				 }
+ 				 
+ 				 /* 일정의 개수에 따라서 가변적으로 세로 높이를 변경 */
+ 				 var scheduleContainerHeight = scheduleContainer.offsetHeight;
+ 				 scheduleContainer.style.height = (scheduleContainerHeight + addHeight) + "px";
+ 				 
+ 				 modalAddEventCheck(); // 모달에 대한 이벤트 감지 체크
+ 				 
+ 				 
+ 			 },
+ 			 error: function(xhr, status, error) {
+ 				console.error('ajax 요청 실패: ', error, xhr, status);
+ 			 }
+ 		 });
+ 	 }
+ 	 
+ 	 /* 모임원 리스트를 가져와서 HTML을 작성하는 함수 */
+ 	 function groupMemberCheck() {
+ 		 var groupNo = "[[${groupNo}]]";
+ 		 var userNo = "[[${readerUserNo}]]";
+ 		 $.ajax({
+ 			 url: '/group/memberList',
+ 			 type: 'GET',
+ 			 data: {
+ 				 groupNo: groupNo,
+ 				 userNo: userNo
+ 			 },
+ 			 contentType: 'application/json',
+ 			 success: function(response) {
+ 				 console.log('ajax 요청 성공');
+ 				 const memberList = response;
+ 				 const memberListTable = document.querySelector('.group-member-list');
+ 				 const memberListContainer = document.querySelector('.group-member-container');
+ 				 var addHeight = memberListContainer.offsetHeight;
+ 				 
+ 				 if(memberList != null) {
+ 					 const readerMemberElement = getReaderMemberInfo(memberList[0]);
+ 					 memberListTable.appendChild(readerMemberElement);
+ 					 addHeight += 95;
+ 					 
+ 					 if(memberList.length > 1) {
+ 						 for(var i=1; i<memberList.length; i++) {
+ 							 const memberElement = getMemberInfo(memberList[i]);
+ 							 memberListTable.appendChild(memberElement);
+ 							 addHeight += 95;
+ 						 }
+ 					 }
+ 				 }
+ 				memberListContainer.style.height = addHeight + "px";
+ 			 },
+ 			 error: function(xhr, status, error) {
+ 				 console.error('ajax 요청 실패: ', error);
+ 			 }
+ 		 });
+ 	 }
+ 	 
+ 	 /* 모임장 표시 엘리먼트를 생성해주는 함수 */
+ 	 function getReaderMemberInfo(memberData) {
+ 		 const readerMember = document.createElement('div');
+ 		 const readerLabel = document.createElement('h3');
+ 		 const readerName = document.createElement('h2');
+ 		 
+ 		 readerLabel.innerText = "모임장";
+ 		 readerName.innerText = memberData.name;
+ 		 
+ 		 readerMember.classList.add('group-reader');
+ 		 readerMember.appendChild(readerLabel);
+ 		 readerMember.appendChild(readerName);
+ 		 
+ 		 return readerMember;
+ 	 }
+ 	 
+ 	 /* 모임원 표시 엘리먼트를 생성해주는 함수 */
+ 	 function getMemberInfo(memberData) {
+ 		 const member = document.createElement('div');
+ 		 const memberLabel = document.createElement('h3');
+ 		 const memberName = document.createElement('h2');
+ 		 
+ 		 memberLabel.innerText = "모임원";
+ 		 memberName.innerText = memberData.name;
+ 		 
+ 		 member.classList.add('group-member');
+ 		 member.appendChild(memberLabel);
+ 		 member.appendChild(memberName);
+ 		 
+ 		 return member;
+ 	 }
+ 	 
+ 	 /* 버튼 엘리먼트를 생성해주는 함수 */
+ 	 function getScheduleButton() {
+ 		 const scheduleButton = document.createElement('div');
+		 const scheduleButtonName = document.createElement('span');
+		 scheduleButton.classList.add('schedule-button');
+		 scheduleButtonName.innerText = '모임 일정 만들기';
+		 scheduleButton.appendChild(scheduleButtonName);
+		 
+		 return scheduleButton;
+ 	 }
+ 	 
+ 	 /* 일정표 양식에 대한 엘리먼트를 생성해주는 함수 */
+ 	 function getScheduleInfo(scheduleData, scheduleNo) {
+ 		 const scheduleInfo = document.createElement('div');
+ 		 const titleSpan = document.createElement('span');
+ 		 const dateSpan = document.createElement('span');
+ 		 const timeSpan = document.createElement('span');
+ 		 const locationSpan = document.createElement('span');
+ 		 var groupNo = scheduleData.groupNo;
+ 		 var isMemberGroupLeader = "[[${isMemberGroupLeader}]]";
+ 		 
+ 		 
+ 		 
+ 		 titleSpan.innerText = scheduleData.scheduleName;
+ 		 dateSpan.innerText = scheduleData.scheduleDate;
+ 		 timeSpan.innerText = scheduleData.scheduleTime;
+ 		 locationSpan.innerText = scheduleData.scheduleLocation;
+ 		 
+ 		 scheduleInfo.classList.add('schedule-info');
+ 		 scheduleInfo.appendChild(titleSpan);
+ 		 scheduleInfo.appendChild(dateSpan);
+ 		 scheduleInfo.appendChild(timeSpan);
+ 		 scheduleInfo.appendChild(locationSpan);
+ 		 
+ 		 /* 현재 로그인 된 회원이 모임장일 경우에만 삭제 버튼 생성 */
+ 		 if(isMemberGroupLeader === "true") {
+ 			/* 일정 삭제 버튼 엘리먼트 생성 */
+ 	 		 const deleteButton = document.createElement('button');
+ 	 		 deleteButton.classList.add('schedule-delete-button');
+ 	 		 deleteButton.innerText = 'X';
+ 	 		 deleteButton.addEventListener('click', () => {
+ 	 			 if(confirm('일정을 삭제하시겠습니까?')) {
+ 	 				 window.location.href = '/schedule/deleteSchedule?groupNo=' + groupNo + '&scheduleNo=' + scheduleNo;
+ 	 			 }
+ 	 		 });
+ 	 		/* 일정 삭제 버튼을 추가하기 */
+ 	 		 scheduleInfo.appendChild(deleteButton);
+ 		 } // end if
+ 		 
+ 		 
+ 		 return scheduleInfo;
+ 	 }
+ 	 
+    </script>
+</body>
+</html>

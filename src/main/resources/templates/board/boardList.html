@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게시판</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/board/boardList.css}">
+<link rel="stylesheet" href="/css/main/mainHeader.css">
+<link rel="stylesheet" href="/css/main/groupMainHeader.css">
+
+<script>
+	
+	function filterTableByCategory() {
+		var selectedCategory = document.getElementById("categoryDropdown").value;
+		var tableRows = document.querySelectorAll("tbody tr");
+
+		tableRows.forEach(function(row) {
+			var categoryCell = row.querySelector("td:nth-child(2)");
+
+			if (selectedCategory === "" || categoryCell.textContent === selectedCategory) {
+				row.style.display = "";
+			} else {
+				row.style.display = "none";
+			}
+		});
+	}
+
+</script>
+</head>
+<body>
+	<div th:replace="~{etc/mainContainer::header}"></div>
+	<div th:replace="~{etc/groupMainHeader::header}"></div>
+
+	<div class="table-container">
+		<div class="table-head">
+			<a th:if="${boardCreateButton}"
+				th:href="@{/board/boardRegister(groupNo=${group.groupNo})}">
+				<button type="button" class="btn-outline-primary">글쓰기</button>
+			</a>
+		</div>
+		<div class="table-wrapper">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" style="width: 5%;">No</th>
+						<th scope="col" style="width: 20%;">카테고리 <select
+							id="categoryDropdown" onchange="filterTableByCategory()">
+								<option value="">전체</option>
+								<option value="공지사항">공지사항</option>
+								<option value="가입인사">가입인사</option>
+								<option value="자유글">자유글</option>
+								<!-- Add more options as needed -->
+						</select>
+						</th>
+						<th scope="col" style="width: 40%;">제목</th>
+						<th scope="col" style="width: 15%;">작성자</th>
+						<th scope="col" style="width: 10%;">조회수</th>
+						<th scope="col" style="width: 15%;">작성일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Table rows -->
+					<tr th:each="board : ${boardList}">
+						<td th:text="${board.boardNo}"></td>
+						<td><span
+							th:classappend="${board.boardCategoryName == '공지사항'} ? 'category-notice' : ''"
+							th:text="${board.boardCategoryName}"> </span></td>
+						<th scope="row" class="title-column"><a
+							th:href="@{/board/boardRead(boardNo = ${board.boardNo})}">[[${board.boardTitle}]]</a></th>
+						<td th:text="${board.userName}"></td>
+						<td th:text="${board.boardHit}"></td>
+						<td th:text="${#temporals.format(board.regDate, 'yyyy/MM/dd')}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>

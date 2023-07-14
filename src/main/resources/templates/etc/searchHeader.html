@@ -1,0 +1,28 @@
+<header>
+<div class="main-container">
+		<div class="title-container">
+            <a th:href="@{/}" class="title">RE! crew</a>
+            <div class="loginInfo" id="loginStatus">
+                <div th:if="${session.user != null}" id="logoutLink">
+                    <div>
+                        <label class="loginUser" style="white-space: nowrap;">[[${session.user.name}]] 님</label>
+                    </div>
+                    <div>
+                        <a th:href="@{/user/logout}" class="logout">로그아웃</a>
+                        <a th:href="@{/user/mypage}" class="mypage" >마이페이지</a>
+                    </div>
+                </div>
+                <div th:if="${session.user == null}" id="logoutLink">
+                        <a th:href="@{/user/login}" class="login">로그인</a>
+                </div>
+            </div>
+        </div>
+        <div class="search-container">
+			
+			<form th:action="@{/group/groupList}" method="get">
+			    <input type="text" id="searchInput" name="searchKeyword" placeholder="키워드를 입력하세요">
+			    <button id="searchButton" type="submit">검색</button>
+			</form>
+		</div>
+</div>
+</header>

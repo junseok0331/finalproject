@@ -1,0 +1,254 @@
+@charset "EUC-KR";
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-size: 13px;
+}
+
+ul, li {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: imherit;
+}
+
+.board_wrap{
+	width : 1000px;
+	margin: 100px auto;
+}
+
+.board_title {
+	margin-bottom: 30px;
+}
+
+.board_title strong {
+	font-size: 3rem;
+}
+
+.btn_wrap {
+	margin-top: 30px;
+	text-align: center;
+	font-size: 0;
+}
+
+.btn_wrap a{
+	display: inline-block;
+	min-width: 80px;
+	padding:10px;
+	border: 1px solid skyblue;
+	border-radius: 2px;
+	font-size: 1.4rem;
+}
+
+.btn_wrap a:first-child {
+	margin-left: 0;
+}
+
+.btn_wrap a:not(:first-child) {
+	margin-left: 10px;
+}
+
+.btn_wrap a.on {
+	background-color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.btn_wrap a.on:hover {
+	background-color: #00FF00;
+}
+
+.board_read{
+	width: 100%;
+	border-top: 2px solid skyblue;
+}
+
+.board_read .title{
+	padding: 20px 15px;
+	border-bottom: 1px dashed #ddd;
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.board_read .info {
+	padding: 15px;
+	border-bottom: 1px solid skyblue;
+	font-size:0;
+}
+
+.board_read .info dl {
+	position: relative;
+	display: inline-block;
+	padding: 0 20px;
+}
+
+.board_read .info dl:first-child{
+	padding-left: 0;
+}
+
+.board_read .info dl::before {
+	content: "";
+	position: absolute;
+	top: 5px;
+	left: 0;
+	display: block;
+	width: 1px;
+	height: 13px;
+	background: #ddd;
+}
+
+.board_read .info dl:first-child::before {
+	display: none;
+}
+
+.board_read .info dl dt,
+.board_read .info dl dd{
+	display: inline-block;
+	font-size: 0.8rem;
+}
+
+.board_read .info dl dd{
+	margin-left: 10px;
+	color: #777;
+}
+
+.board_read .content {
+	padding: 15px;
+	border-bottom: 1px solid skyblue;
+	line-height: 160%;
+	font-size: 1.0rem;
+}
+
+/********* 댓글 CSS *********/
+.board_comment_wrap{
+	width : 1000px;
+	margin: 100px auto;
+	border-top: 3px solid skyblue;
+	border-bottom: 3px solid skyblue;
+	border-left: 3px solid skyblue;
+	border-right: 3px solid skyblue;
+}
+
+.board_comment_title {
+	display: flex;
+	margin-bottom: 20px;
+	text-align: left;
+    margin-top: 1em;
+}
+
+.board_comment_title strong {
+	font-size: 2rem;
+}
+
+.board_read_comment{
+	width: 100%;
+	margin: 0 auto;
+	border-top: 2px solid skyblue;
+}
+
+
+.board_read_comment .commentContent{
+	overflow: auto;
+	padding: 20px 385px;
+	resize: vertical;				/*수직으로만 크기 조정*/
+	border-bottom: 1px dashed #ddd;
+	font-size: 1rem;
+	display: inline-block;
+    vertical-align: middle;
+    text-align : left;
+    width: 20vw;
+}
+
+.board_read_comment .commentContent::placeholder {
+	text-align : left;
+}
+
+.comment_info {
+	    width: 100%;
+        border-top: 1px solid skyblue;
+        border-collapse: collapse;
+        border-collapse: separate;
+		border-spacing: 0;
+}
+
+.comment_info th {
+	vertical-align: middle;
+    font-size: 1.2rem;
+}
+
+.comment_info th:nth-child(3) {
+  width: 15%;
+}
+
+.comment_info thead tr th,
+.comment_info tbody tr td {
+    border-bottom: 1px dashed #777;
+    padding: 10px;
+    text-align: center;
+}
+
+.comment_info thead tr th:not(:last-child) {
+    border-bottom: 1px dashed #444444;
+    padding: 10px;
+    text-align: center;
+}
+
+.comment_info tbody tr:not(:last-child) td {
+    border-bottom: 1px dashed #444444;
+    padding: 10px;
+    text-align: center;
+}
+
+.comment_info tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.comment-ins-Btn {
+	font-size: 0;
+	display: inline-block;
+	min-width: 80px;
+	padding:10px;
+	border: 1px solid skyblue;
+	border-radius: 2px;
+	font-size: 0.8rem;
+	background-color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.comment-ins-Btn:first-child {
+	margin-left: 0;
+}
+
+.comment-ins-Btn:not(:first-child) {
+	margin-left: 10px;
+}
+
+.comment-ins-Btn:hover {
+	background-color: #00FF00;
+}
+
+.comment-del-Btn {
+	font-size: 0;
+	display: inline-block;
+	min-width: 10px;
+	padding:10px;
+	border: 1px solid skyblue;
+	border-radius: 2px;
+	font-size: 0.8rem;
+	background-color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.comment-del-Btn:hover {
+	background-color: #00FF00;
+}

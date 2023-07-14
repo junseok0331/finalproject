@@ -1,0 +1,11 @@
+set foreign_key_checks = 0;
+drop table tbl_board;
+drop table tbl_board_category;
+drop table tbl_chat;
+drop table tbl_comment;
+drop table tbl_group;
+drop table tbl_group_category ;
+drop table tbl_group_member ;
+drop table tbl_region;
+drop table tbl_user;
+set foreign_key_checks = 1;

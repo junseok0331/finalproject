@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+</head>
+<body>
+	<h1>Welcome to the Home Page</h1>
+	<div>
+		<a th:href="@{/user/login}">Login</a>
+		<a th:href="@{/user/logout}">Logout</a>
+	</div>
+
+	<form th:action="@{/group/groupList}" method="get" id="searchForm">
+		<div class="input-group">
+			<input type="hidden" name="page" value="1">
+			<div class="input-group-prepend">
+				<select class="custom-select" name="type">
+					<option th:selected="${pageRequestDTO.type == null}">-------</option>
+					<option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
+				</select>
+			</div>
+			<input class="form-control" name="keyword"
+				th:value="${pageRequestDTO.keyword}">
+			<div class="input-group-append" id="button-addon4">
+				<button class="btn btn-outline-secondary btn-search" type="button">검색</button>
+			</div>
+		</div>
+	</form>
+
+
+	<a th:href="@{/user/register}">Register</a>
+	<a th:href="@{/group/groupList}">Group List</a>
+	<br>
+<!-- 
+	<label for="groupCategoryNo">그룹 카테고리</label>
+	<select class="form-control" id="groupCategoryNo"
+		name="groupCategoryNo">
+		<option value=" ">-- 그룹 카테고리 선택 --</option>
+		<option th:each="groupCategory : ${groupCategoryList}"
+			th:value="${groupCategory.groupCategoryNo}"
+			th:text="${groupCategory.groupCategoryName}"></option>
+	</select>
+	
+	<a th:href="@{group/groupList/1}">1번 카테고리 목록보기</a> 
+-->
+	<h2>카테고리</h2>
+	<table>
+		<tbody>
+			<tr th:each="groupCategory : ${groupCategoryList}">
+				<th scope="row">
+					<a th:href="@{/group/groupList(groupCategoryNo = ${groupCategory.groupCategoryNo})}">[[${groupCategory.groupCategoryName}]]</a>
+				</th> 
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<h2>지역</h2>
+	<table>
+		<tbody>
+			<tr th:each="region : ${regionList}">
+				<th scope="row">
+					<a th:href="@{/group/groupList(regionNo = ${region.regionNo})}">[[${region.regionName}]]</a>
+				</th> 
+			</tr>
+		</tbody>
+	</table>
+	
+	<input type="text" th:value="${session.user.name}">
+
+</body>
+</html>

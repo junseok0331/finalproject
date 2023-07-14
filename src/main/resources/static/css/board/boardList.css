@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap');
+
+body {
+	height: 900px;
+	font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.category-column {
+	text-align: left;
+	position: relative;
+	right: 80px; /* 원하는 픽셀 값으로 변경 */
+}
+
+.author-column {
+	text-align: right;
+	position: relative;
+	left: 95px; /* 원하는 픽셀 값으로 변경 */
+}
+
+.views-column {
+	text-align: right;
+	position: relative;
+	left: -10px;
+}
+
+.date-column {
+	text-align: left;
+	position: relative;
+	left: -80px; /* 음수 값을 사용하여 왼쪽으로 이동 */
+}
+
+.table-container {
+	max-height: 50vh; /* 원하는 높이로 설정 */
+	justify-content: flex-end;
+	position: relative; /* 추가된 부분 */
+	margin-top: 120px;
+}
+
+.header-container {
+	height: 200px;
+	margin-left: 20%;
+	margin-right: 20%;
+	text-align: center;
+	position: relative;
+	top: 100px;
+}
+
+.table-wrapper {
+	overflow: auto;
+	height: 450px;
+	position: relative;
+}
+
+.sticky-header {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 1;
+}
+/* 스크롤바 스타일링 */
+.table-wrapper::-webkit-scrollbar {
+	width: 0px; /* 스크롤바 너비 */
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+	background-color: transparent; /* 스크롤바 트랙 배경색 */
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.3); /* 스크롤바 색상 */
+	border-radius: 10px; /* 스크롤바 모서리 반경 */
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.5); /* 스크롤바 호버 시 색상 */
+}
+
+.table {
+	width: 60%;
+	border-collapse: collapse;
+	margin: auto;
+	position: sticky;
+	table-layout: fixed;
+}
+
+thead {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 2;
+}
+
+.table thead {
+	position: sticky;
+	top: 0px;
+	background-color: #fff;
+	z-index: 1;
+	height: 60px; /* 원하는 높이로 설정 */
+}
+
+.table thead th, .table tbody td {
+	text-align: center;
+	padding: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.category-column {
+	display: flex;
+	align-items: center;
+}
+
+.category-select {
+	flex-grow: 1;
+	margin-left: 10px;
+}
+
+.table-container th {
+	border: 1px;
+	border-top: 2px solid
+		rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	padding: 20px;
+	text-align: center;
+	top: 0; /* 수정된 부분 */
+	margin-top: -100px; /* 원하는 값으로 변경 */
+}
+
+.table-container td {
+	border: 1px;
+	border-top: 2px solid
+		rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	padding: 10px;
+	text-align: center;
+}
+
+.title {
+	color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	width: 500px;
+	height: 138px;
+	position: absolute;
+	left: 50%;
+	top: 0%;
+	transform: translateX(-50%);
+	font-family: Fugaz One;
+	text-align: center;
+	font-size: 80px;
+	letter-spacing: 0;
+	text-decoration: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	/* 다른 CSS 속성을 추가로 조정할 수 있습니다 */
+}
+
+.table-head {
+	display: flex;
+	justify-content: flex-start;
+	padding: 0;
+	margin: 0;
+	margin-left: 20%;
+	text-decoration: none;
+	margin-bottom: 10px;
+	width: 100px;
+	height: 40px;
+}
+
+.btn-outline-primary {
+	background-color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	height: 40px;
+	width: 140px;
+	border-radius: 20px;
+	border: 2px solid white;
+	color: white;
+	cursor: pointer;
+	float: left;
+}
+
+.category-notice {
+	border-radius: 50%;
+	background-color: lightcoral;
+	padding: 4px 10px; /* 동그라미 영역을 조정하기 위한 패딩값 */
+	display: inline-block; /* 동그라미를 감싸는 영역을 inline-block으로 설정 */
+}

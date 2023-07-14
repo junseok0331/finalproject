@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main/mainHeader.css">
+  <link rel="stylesheet" href="/css/main/groupMainHeader.css">
+  <title>Photo Book</title>
+  <style>
+    @font-face {
+      font-family: 'KBO-Dia-Gothic_bold';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/KBO-Dia-Gothic_bold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+	    font-family: 'KCCMurukmuruk';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/KCCMurukmuruk.woff2') format('woff2');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+    .photo-main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .photo-scroll {
+      width: 1000px;
+      height: 920px;
+      overflow-y: scroll;
+      border: 2px solid rgb(0, 0, 0, 0.3);
+      padding: 15px;
+    }
+    .photo-scroll::-webkit-scrollbar {
+      display: none;
+      position: relative;
+    }
+    .photo-container {
+      position: relative;
+      display: flex;
+    }
+    .photo-container > img {
+      justify-content: flex-start;
+      width: 300px;
+      height: 300px;
+      margin: 10px;
+      border: 1px solid rgb(0, 0, 0, 0.4);
+      padding: 5px;
+      box-shadow: 2px 2px 4px rgb(0, 0, 0, 0.7);
+    }
+    .title-and-button {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .title-and-button .title {
+      font-size: 40px;
+    }
+    .add-photo-button {
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      position: absolute;
+      right: -150px;
+    }
+    .add-photo-button img {
+      width: 100px;
+      transition: transform 0.3s;
+    }
+    .add-photo-button:hover img {
+      transform: rotate(-20deg);
+    }
+    dialog {
+    	border: none;
+    	border: 1px solid rgb(0, 0, 0, 0.4);
+    	border-radius: 0.4rem;
+    	position: absolute;
+    	top: calc(1080px / 2);
+    	left: calc(1920px / 2);
+    	transform: translate(-58%, -20%);
+    	width: 700px;
+    	height: 900px;
+    	overflow: hidden;
+    }
+    .photo-dialog-container {
+    	font-family: KCCMurukmuruk;
+    	z-index: 9999;
+    	user-select: none;
+    	display: flex;
+    	flex-direction: column;
+    	justify-content: center;
+    	align-items: center;
+    }
+    .photo-dialog-container #modal-name {
+    	text-align: center;
+    	font-size: 24px;
+    }
+    .photo-frame {
+    	display: flex;
+    	flex-direction: column;
+    	justify-content: center;
+    	align-items: center;
+    	position: relative;
+    }
+    .photo-frame .photo {
+    	width: 700px;
+    	height: 500px;
+    	margin-top: 20px;
+    	border-radius: 0.4rem;
+    	display: none;
+    }
+    .photo-frame .none-photo {
+    	width: 700px;
+    	height: 500px;
+    	margin-top: 20px;
+    	border-radius: 0.4rem;
+    }
+    .photo-input-button {
+    	position: absolute;
+    	top: -30px;
+    	left: 50px;
+    	padding: 5px 10px;
+    	border: none;
+    	border-radius: 0.35rem;
+    	color: white;
+    	background: rgb(0, 0, 0, 0.6);
+    	cursor: pointer;
+    	box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
+    }
+    .photo-input-button:active {
+    	box-shadow: none;
+    	transform: translateX(2px);
+    	transform: translateY(2px);
+    }
+    .formData > * {
+    	margin: 0;
+    	padding: 0;
+    }
+    .formData {
+    	display: flex;
+    	flex-direction: column;
+    	align-items: center;
+    	margin-top: 30px;
+    	width: 100%;
+    }
+    .input-photo-title,
+    .input-photo-content {
+    	display: grid;
+    }
+    .input-photo-info input[type="text"] {
+    	width: 550px;
+    	height: 30px;
+    	margin-bottom: 15px;
+    	font-size: 18px;
+    }
+    .input-photo-info label {
+    	font-size: 22px;
+    	margin-bottom: 5px;
+    }
+    .form-buttons {
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
+    	margin-top: 10px;
+    }
+    .form-buttons * {
+    	margin-right: 25px;
+    }
+    .form-buttons button {
+    	width: 60px;
+    	height: 40px;
+    	padding: 5px 10px;
+    	border: none;
+    	border-radius: 0.35rem;
+    	color: white;
+    	background: rgb(0, 0, 0, 0.6);
+    	cursor: pointer;
+    	box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
+    }
+    .form-buttons button:active {
+    	box-shadow: none;
+    	transform: translateX(2px);
+    	transform: translateY(2px);
+    }
+    .dragBar {
+    	width: 120%;
+    	height: 40px;
+    	margin-top: -20px;
+    	background: #E3E3E3;
+    }
+    .none-photo-list {
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
+    	text-align: center;
+    	margin-top: 50px;
+    	line-height: 300px;
+    	font-size: 30px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div th:replace="~{etc/mainContainer::header}"></div>
+  <div th:replace="~{etc/groupMainHeader::header}"></div>
+
+  <div class="photo-main-container">
+    <div class="title-and-button">
+      <h1 class="title">Photo</h1>
+      <div class="add-photo-button">
+        <img src="../image/test/camera-logo.png" id="addButton"></div>
+      </div>
+    <div class="photo-scroll"> <!-- 사진 이미지 엘리먼트들이 들어갈 공간 -->
+	    <div class="none-photo-list" style="display: none;">
+	    	<h2> 등록된 사진이 없습니다. </h2>
+	    </div>
+    </div>
+  </div>
+  
+  <!-- 모달 팝업창 -->
+  <dialog id="photoModal">
+  		<div class="photo-dialog-container">
+	  		<div class="dragBar" id="dragBar"></div>
+	    	<h3 id="modal-name">사진을 등록하세요!</h3>
+	    	<div class="photo-frame">
+	    		<button id="photoInputButton" class="photo-input-button">사진 선택</button>
+	    		<img id="photo" class="photo" src="">
+	    		<img id="nonePhoto" class="none-photo" src="../image/test/none-photo.jpg">
+	    	</div>
+	    	<div class="formData">
+	    		<form id="photoInsertForm" action="/photo/uploadFile" method="post" enctype="multipart/form-data">
+	    			<input id="photoInput" name="multipartFile" type="file" style="display: none;">
+	    			<input type="hidden" name="groupNo" th:value="${groupNo}">
+	    			<input type="hidden" name="userNo" th:value="${session.user.userNo}">
+	    			<div class="input-photo-info">
+	    				<div class="input-photo-title">
+	    					<label for="photoTitle">제목</label>
+	    					<input type="text" id="photoTitle" name="photoTitle">
+	    				</div>
+	    				<div class="input-photo-content">
+	    					<label for="photoContent">내용</label>
+	    					<input type="text" id="photoContent" name="photoContent">
+	    				</div>
+	    			</div>
+	    			<div class="form-buttons">
+	    				<button id="submitButton">등록</button>
+	    				<button id="cancelButton">취소</button>
+	    			</div>
+	    		</form>
+	    	</div>
+    	</div>
+    </dialog>
+    
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  	$(document).ready(function() {
+  		const photoScrollContainer = document.querySelector('.photo-scroll');
+  		var groupNo = "[[${groupNo}]]";
+  		
+  		/* DOM이 모두 로드되면 해당 그룹의 사진 리스트를 가져와 출력해준다. */
+  		$.ajax({
+  			url: '/photo/getPhotoListByGroupNo',
+  			method: 'GET',
+  			data: {
+  				groupNo: groupNo
+  			},
+  			dataType: 'json',
+  			contentType: 'application/json',
+  			success: function(response) {
+  				console.log('ajax 요청 성공(/photo/getPhotoListByGroupNo)');
+  				const photoRawDataList = response;
+  				
+  				if(photoRawDataList.length < 1) {
+  					const nonePhoto = document.querySelector('.none-photo-list');
+  					nonePhoto.style.display = "block";
+  				} else {
+  					var photoContainerNums = parseInt(photoRawDataList.length / 3); /* 3개가 모두 출력되는 이미지 컨테이너 개수 */
+  					var lastPhotoNums = photoRawDataList.length % 3; /* 남은 이미지 개수 */
+  					var dataIndex = 0; // 사진을 순회하면서 증가시킬 인덱스 
+  					
+  					// photoRawDataList 길이를 3으로 나눈 몫 만큼 진행
+  					for(var i=0; i<photoContainerNums; i++) {
+  						var photoContainer = document.createElement('div');
+  						photoContainer.classList.add('photo-container');
+  						
+  						for(var j=0; j<3; j++) {
+  							var imageElement = document.createElement('img');
+  							imageElement.setAttribute('src', "data:image;base64," + photoRawDataList[dataIndex]);
+  							imageElement.setAttribute('alt', 'photo ' + (dataIndex + 1));
+  							dataIndex++;
+  							
+  							photoContainer.appendChild(imageElement);
+  						}
+  						photoScrollContainer.appendChild(photoContainer);
+  					}
+  					
+  					// photoRawDataList 길이를 3으로 나눈 나머지가 존재하면 나머지를 작성
+  					if(lastPhotoNums > 0) {
+  						var photoContainer = document.createElement('div');
+  						photoContainer.classList.add('photo-container');
+  						
+  						for(var i=0; i<lastPhotoNums; i++) {
+  							var imageElement = document.createElement('img');
+  							imageElement.setAttribute('src', "data:image;base64," + photoRawDataList[dataIndex]);
+  							imageElement.setAttribute('alt', 'photo ' + (dataIndex + 1));
+  							dataIndex++;
+  							
+  							photoContainer.appendChild(imageElement);
+  						}
+  						photoScrollContainer.appendChild(photoContainer);
+  					}
+  					
+  				}
+  				
+  				
+  				
+  				
+  			},
+  			error: function(xhr, status, error) {
+  				console.log('ajax 요청 실패');
+  				console.log('데이터가 존재하지 않는지 확인');
+  			}
+  		}); // end ajax
+  	}); // end document ready
+  	
+  </script>
+  <script>
+  	  const photoModal = document.getElementById('photoModal'); /* 사진 입력 모달 */
+	  const addButton = document.getElementById('addButton'); /* 모달 OPEN */
+	  const cancelButton = document.getElementById('cancelButton'); /* 모달 CLOSE */
+	  const submitButton = document.getElementById('submitButton');
+	  
+	  const photoInput = document.getElementById('photoInput'); /* 실제 사진 입력 엘리먼트 */
+	  const photoInputButton = document.getElementById('photoInputButton'); /* 사진 입력을 대신 할 버튼 */
+	  const photo = document.getElementById('photo'); /* 사진이 표시되는 엘리먼트 */
+	  const nonePhoto = document.getElementById('nonePhoto'); /* 사진이 없을 때 표시되는 엘리먼트 */
+	  
+	  const photoInsertForm = document.getElementById('photoInsertForm'); // 이미지 입력 폼
+	  
+	  /* 카메라 모양을 누르면 사진 입력 창 OPEN */
+	  addButton.addEventListener('click', () => {
+	    photoModal.showModal();
+	  });
+	  
+	  /* 취소 버튼을 누르면 사진 입력 창 CLOSE */
+	  cancelButton.addEventListener('click', (event) => {
+		  event.preventDefault();
+		  photoModal.close();
+	  });
+	  
+	  /* 전송 버튼을 누르면 입력 값 검증 후 전송 */
+	  submitButton.addEventListener('click', (event) => {
+		  event.preventDefault();
+		  const photoTitle = document.getElementById('photoTitle');
+		  const photoContent = document.getElementById('photoContent');
+		  
+		  if(photo.getAttribute('src') === "") {
+			  alert('이미지 파일을 선택해주세요.');
+			  return;
+		  }
+		  
+		  if(photoTitle.value.trim() === "") {
+			  alert('제목을 입력해주세요.');
+			  photoTitle.focus();
+			  return;
+		  }
+		  
+		  if(photoContent.value.trim() === "") {
+			  alert('내용을 입력해주세요.');
+			  photoContent.focus();
+			  return;
+		  }
+		  /* 폼 데이터를 작성해서 '/photo/uploadFile' URL 요청 */
+		  
+		  photoInsertForm.submit();
+	  });
+	  
+	  
+	  photoInputButton.addEventListener('click', () => {
+	  	photoInput.click();		
+	  });
+	  
+	  /* 선택한 이미지 파일 검증 및 미리보기 */
+	  photoInput.addEventListener('change', function(event) {
+		  const file = event.target.files[0];
+		  const fileName = file.name;
+		  const reader = new FileReader();
+		  
+		  const lastDot = fileName.lastIndexOf('.') + 1;
+		  const extensions = ['jpg', 'jpeg', 'png', 'gif'];
+		  const extension = fileName.substring(lastDot, fileName.length);
+		  
+		  if(extensions.includes(extension)) {
+			  console.log("이미지 파일입니다.");
+			  reader.readAsDataURL(file);
+			  
+			  photo.style.display = "block";
+			  nonePhoto.style.display = "none";
+		  } else {
+			  console.log("이미지 파일이 아닙니다.");
+			  alert('이미지 파일만 등록할 수 있습니다. \n(jpg, jpeg, png, gif)');
+		  }
+		  console.log(extension);
+		  
+		  reader.onload = function() {
+			 photo.src = reader.result; 
+		  };
+	  });
+	  
+  </script>
+</body>
+</html>

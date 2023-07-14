@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+    <style>
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+        .chat-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-room {
+        display: flex;
+        flex-direction: column;
+        width: 900px;
+        height: 700px;
+        border: 1px solid #ccc;
+        overflow: auto;
+        }
+
+        .chat-messages {
+        padding: 10px;
+        }
+
+        .message {
+        margin-bottom: 10px;
+        }
+
+        .sender {
+        font-weight: bold;
+        font-size: 1.3rem;
+        margin-left: 10px;
+        margin-top: 20px;
+        }
+
+        .content {
+        margin-left: 30px;
+        margin-top: 5px;
+        font-size: 1.2rem;
+        }
+
+        .chat-input {
+        padding: 20px;
+        background-color: #f5f5f5;
+        flex: 1;
+        justify-content: center;
+        height: 100px;
+        display: flex;
+        flex-wrap: nowrap;
+        }
+
+        textarea {
+        width: 85%;
+        height: 30px;
+        padding: 5px;
+        margin-right: 35px;
+        font-size: 16px;
+        resize: none;
+        white-space: pre; /* 연속한 공백 입력 값을 유지시켜줌 */
+        }
+
+        button {
+        padding: 10px 15px;
+        background-color: skyblue;
+        border-radius: 0.35rem;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        white-space: nowrap;
+        }
+        .chat-messages {
+            height: 600px; /* 대화창의 최대 높이 */
+            overflow-y: scroll; /* 세로 스크롤을 표시하도록 설정 */
+        }
+        .chat-messages::-webkit-scrollbar {
+        width: 8px; /* Set the width of the scrollbar */
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3); /* Set the color of the scrollbar thumb */
+        border-radius: 4px; /* Apply border radius to the scrollbar thumb */
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+        background-color: transparent; /* Set the background color of the scrollbar track to transparent */
+        }
+
+    </style>
+    
+</head>
+<body>
+	
+	
+    <div class="chat-container" >
+    <div class="chat-room">
+        <div class="chat-messages">
+          <div class="message-frame">
+            <!-- chatList가 null 인지 확인 -->
+			<div th:if="${chatList != null}">
+				<div th:each="chat : ${chatList}" >
+					<div class="message">
+		              <div class="sender" th:text="${chat.userName}"></div>
+		              <div class="content" th:utext="${chat.chatContent}"></div>
+		            </div>
+				</div> 
+			</div>
+          </div> <!-- end message-frame -->
+        </div>
+        <div class="chat-input">
+	          <textarea id="inputText" name="inputText" placeholder="채팅 내용을 입력하세요." ></textarea>
+	          <button id="sendButton">보내기</button>
+        </div>
+        <form id="sendForm" th:action="@{/group/insertChat}" method="post">
+        	<div th:if="${session.user != null}">
+        		<input type="hidden" id="userNo" name="userNo" th:value="${session.user.userNo}">
+        	</div>
+        	<!-- user session 종료 시 문제됨 -->
+        	<input type="hidden" id="groupNo" name="groupNo" th:value="${groupNo}">
+        	<input type="hidden" id="chatContent" name="chatContent">
+        </form>
+      </div>
+      </div>
+      
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        /* 페이지가 시작될 때 스크롤바를 최하단으로 내려주는 기능 */
+        window.addEventListener('load', function() {
+	        var chatMessages = document.querySelector('.chat-messages');
+	        chatMessages.scrollTop = chatMessages.scrollHeight;
+	        
+	        /* 채팅방에 진입할 시 입력창에 포커스 */
+	        var inputText = document.getElementById('inputText');
+	        inputText.focus();
+	        
+        });
+        
+		/* 개행을 위해서는 Shift + Enter 키를, 
+		   전송을 위해서는 Enter 키를 입력하는 기능 */
+        $('#inputText').on('keydown', function(event) {
+            if(event.shiftKey && event.keyCode === 13) {
+                // 개행만 할 때 쉬프트와 엔터를 같이 누름
+            } else if(event.keyCode === 13) {
+                event.preventDefault();
+                sendFormSubmit();
+            }
+        })
+        
+		/* 전송 버튼을 눌렀을 때 실행되는 구문 */
+		
+		$('#sendButton').on('click', function() {
+			sendFormSubmit();
+		})
+		
+		
+		/* sendForm Submit Function */
+		function sendFormSubmit() {
+        	/* sendForm */
+            const sendForm = document.getElementById('sendForm');
+            
+            var inputText = document.getElementById('inputText').value; // 입력된 채팅 내용을 가져옴
+			var chatContent = document.getElementById('chatContent'); // 폼으로 보내질 채팅 내용 관련 객체 전달
+			chatContent.value = inputText; // 입력된 채팅 내용을 객체의 값으로 설정
+
+			if(inputText.trim() == '') {
+				alert("내용을 입력해주세요.");
+				return;
+			}
+			sendForm.submit();
+		}
+		
+
+    </script>
+
+</body>
+</html>

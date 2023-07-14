@@ -1,0 +1,382 @@
+.group-main-container {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0 auto;
+	margin-top: 100px;
+}
+.visible-button:hover {
+	filter: brightness(90%);
+}
+.visible-button:hover .img-change-button {
+	visibility: visible;
+}
+.img-change-button {
+	margin: 0;
+	padding: 10px 15px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: 10px;
+	margin-top: 10px;
+	border: none;
+	background: gray;
+	border-radius: 0.45rem;
+	opacity: 0.4;
+	cursor: pointer;
+	font-size: 20px;
+	color: white;
+	font-weight: 600;
+	visibility: hidden;
+}
+.group-main-img {
+	width: 100%;
+	height: 500px;
+	border-radius: 0.45rem;
+	box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.6);
+}
+.group-title {
+	width: 100%;
+	margin-left: 20px;
+	font-size: 40px;
+	font-style: italic;
+}
+.description-container {
+	width: 100%;
+	height: 450px;
+	margin-top: 50px;
+	border: 1px solid #dfdfdf;
+	border-radius: 0.45rem;
+	box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.6);
+}
+.description {
+	width: 90%;
+	height: 300px;
+	margin-left: 20px;
+	margin-right: 20px;
+	font-size: 22px;
+	overflow-y: scroll;
+	box-sizing: border-box;
+}
+.description::-webkit-scrollbar {
+	width: 10px;
+}
+.description::-webkit-scrollbar-thumb {
+	background-color: rgb(0, 0, 0, 0.3);
+    border-radius: 25px;
+}
+.group-member-container {
+	width: 100%;
+	height: 250px;
+	margin-top: 50px;
+	border: 1px solid #dfdfdf;
+	border-radius: 0.45rem;
+	box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.6);
+}
+.group-member-title {
+	width: 100%;
+	margin-left: 20px;
+	font-size: 40px;
+	font-style: italic;
+}
+.group-member {
+	width: 100%;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.group-main-img-button {
+    cursor: pointer;
+    width: 100%;
+    height: 500px;
+    border-radius: 0.35rem;
+    background-color: skyblue;
+    color: white;
+    text-align: center;
+    line-height: 450px;
+    font-size: 1.5em;
+    display: none;
+}
+.group-main-noimage {
+    width: 100%;
+    height: 500px;
+    border-radius: 0.35rem;
+    background-color: #e7e7e7;
+    color: rgb(0, 0, 0, 0.4);
+    text-align: center;
+    line-height: 450px;
+    font-size: 1.5em;
+    display: none;
+}
+.hidden-input {
+	display: none;
+}
+.schedule-container {
+	width: 100%;
+	height: 150px;
+	margin-top: 50px;
+	border: 1px solid #dfdfdf;
+	border-radius: 0.45rem;
+	box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.6);
+}
+.schedule-title { 
+	width: 100%;
+	margin-left: 20px;
+	font-size: 40px;
+	font-style: italic;
+}
+.schedule {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+}
+.none-schedule {
+	margin: 0;
+	padding: 0;
+	width: 90%;
+	height: 120px;
+	line-height: 100px;
+	margin-left: 20px;
+	text-align: center;
+	display: none;
+}
+.none-schedule span {
+	font-size: 30px;
+	text-shadow: 2px 2px 3px rgb(0, 0, 0, 0.2)
+}
+.schedule-button {
+	margin: 0;
+	padding: 0;
+	width: 90%;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+	background-color: #d1fcfa;
+	cursor: pointer;
+	color: rgb(0, 0, 0, 0.8);
+	border-radius: 0.35rem;
+	box-shadow: 2px 2px 3px rgb(0, 0, 0, 0.7);
+	margin-bottom: 15px;
+	white-space: nowrap;
+}
+.schedule-button span {
+	font-size: 30px;
+	text-shadow: 2px 2px 3px rgb(0, 0, 0, 0.2)
+}
+.schedule-info {
+	margin: 0;
+	padding: 0;
+	width: 90%;
+	height: 250px;
+	display: flex;
+	flex-direction: column;
+	border: none;
+	border-radius: 0.35rem;
+	background-color: #218ca3;
+	box-shadow: 2px 2px 3px rgb(0, 0, 0, 0.7);
+	margin-bottom: 15px;
+	white-space: nowrap;
+	position: relative;
+}
+.schedule-delete-button {
+      padding: 10px 15px;
+      font-size: 30px;
+      border: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #ff5b5b;
+      margin-right: 10px;
+      margin-top: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+.schedule-info span:nth-child(1) {
+	font-size: 45px;
+	margin-top: 15px;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	color: white;
+	font-weight: 500;
+	text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.6);
+}
+.schedule-info span:nth-child(n+2) {
+	font-size: 28px;
+	margin-left: 16px;
+	margin-bottom: 5px;
+	color: white;
+	font-weight: 500;
+	text-shadow: 1px 1px 1px rgb(0, 0, 0, 0.6);
+}
+.schedule-modal {
+	margin: 0;
+	padding: 12px;
+	max-width: 70ch;
+	border-radius: 0.35rem;
+	box-shadow: 2px 2px 5px rgb(0, 0, 0, 0.7);
+	border: none;
+	width: 100%;
+	position: fixed;
+	top: 20%;
+	left: 32%;
+}
+.schedule-modal::backdrop {
+	background: #b1f8ef;
+	opacity: 0.2;
+}
+.schedule-modal form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 5px;
+}
+#schedule-name {
+	font-size: 25px;
+	text-align: center;
+	user-select: none;
+	
+}
+.form-input {
+	display: grid;
+	width: 80%;
+	margin-bottom: 15px;
+}
+.form-input label {
+	margin-bottom: 5px;
+	user-select: none;
+}
+.form-input input {
+	height: 20px;
+}
+.form-input textarea {
+	height: 60px;
+	resize: none;
+}
+.form-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 15px;
+}
+.form-button button {
+	margin: 0;
+	padding: 10px 15px;
+	font-size: 16px;
+	font-weight: 400;
+	margin-right: 15px;
+	border: none;
+	border-radius: 0.35rem;
+	background-color: #96ecf3;
+	color: rgb(0, 0, 0, 0.7);
+	text-shadow: 2px 2px 2px gray;
+}
+.form-button button:hover {
+	cursor: pointer;
+	box-shadow: 2px 2px 3px rgb(0, 0, 0, 0.3);
+}
+
+.group-member-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.group-member, 
+.group-reader {
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: center;
+	  align-items: center;
+	  border-radius: 0.45rem;
+	  margin-bottom: 15px;
+	  width: 70%;
+	  height: 80px;
+	  min-width: 400px;
+	  white-space: nowrap;
+}
+.group-member {
+  	  background-color:rgb(121, 204, 230);
+}
+.group-member h3 {
+	  flex: 0 0 30%;
+	  text-align: right;
+	  font-size: 20px;
+	  margin-right: 25px;
+} 
+.group-member h2 {
+	  flex: 1;
+	  font-size: 36px;
+	  letter-spacing: 4px;
+	  margin-left: 50px;
+}
+.group-reader {
+  	  background-color:aquamarine;
+}
+.group-reader h3 {
+	  flex: 0 0 30%;
+	  text-align: right;
+	  font-size: 20px;
+	  margin-right: 25px;
+}
+.group-reader h2 {
+	  flex: 1;
+	  font-size: 36px;
+	  letter-spacing: 4px;
+	  margin-left: 50px;
+}
+.group-buttons {
+	margin: 0;
+	padding: 0;
+	margin-top: 20px;
+}
+.join-button {
+	width: 100%;
+	height: 100px;
+	margin-top: 10px;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: #b6eff3;
+	color: #3c3c3c;
+	letter-spacing: 3px;
+}
+.leave-button {
+	width: 100%;
+	height: 100px;
+	margin-top: 10px;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: #c8f4bb;
+	color: #3c3c3c;
+	letter-spacing: 3px;
+}
+.delete-button {
+	width: 100%;
+	height: 100px;
+	margin-top: 10px;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: red;
+	color: white;
+	letter-spacing: 3px;
+}
+.group-buttons .join-button,
+.group-buttons .leave-button {
+	border: 1px solid #dfdfdf;
+	border-radius: 0.45rem;
+	box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.6);
+}
+.group-buttons .join-button:active,
+.group-buttons .leave-button:active {
+	border: 1px solid #dfdfdf;
+	border-radius: 0.45rem;
+	box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.7);
+}
+.join-button:hover, .leave-button:hover {
+	cursor: pointer;
+}
+
+		

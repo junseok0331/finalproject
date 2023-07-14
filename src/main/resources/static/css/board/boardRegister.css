@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap');
+body {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+.headerTab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 50%;
+	margin: 0 auto;
+}
+
+
+.headerTab-button a {
+   color: #666666;
+   text-decoration: none;
+}
+
+.headerTab-button:hover {
+   background-color: #007BFF;
+   border-color: #007BFF;
+   color: white;
+}
+
+.headerTab-button:hover a {
+   color: white;
+}
+
+.boardInfo{
+	width: 50%;
+	margin: 0 auto;
+	
+	font-weight : bold;
+}
+.board-container {
+    width: 45%;
+    margin: 0 auto;
+   	margin-top: 20px; /* 수정된 상단 마진 값 */
+    margin-bottom: 20px; /* 수정된 하단 마진 값 */
+}
+
+.center {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#boardTitle {
+    height: 40px; /* 수정된 높이 값 */
+}
+
+textarea {
+    width: 100%;
+    height: 300px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+    .bodyTab-button {
+        background-color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+        border: 2px solid white;
+        border-radius: 30px;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        height: 40px;
+        line-height: 20px;
+        margin-top: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    .bodyTab-button button {
+	font-size: 18px;
+	text-align: right;
+	}
+    
+
+    .bodyTab-button button:hover {
+        color: white;
+    }
+     #groupNo, #userNo {
+    display: none;
+  }

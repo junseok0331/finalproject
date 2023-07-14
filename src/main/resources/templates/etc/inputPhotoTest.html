@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .hidden-input {
+      display: none;
+    }
+    .file-select-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+      <h1>사진 파일 입력 후 불러오기 테스트</h1>
+      <img id="previewImage" src="" alt="Preview Image" width="400" height="300">
+
+      <label for="imageInput" class="file-select-button">File Select</label>
+      <input type="file" id="imageInput" class="hidden-input">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      const imageInput = document.getElementById('imageInput');
+      const imageDiv = document.getElementById('previewImage');
+      
+      imageDiv.src = "../image/groupMain/new_image.jpg";
+
+      imageInput.addEventListener('change', handleFileSelection);
+
+      // 사진 입력 버튼으로 값이 변경될 경우
+      function handleFileSelection(event) {
+        let reader = new FileReader();
+        let file = event.target.files[0];
+        let filename = file.name;
+
+        var _lastDot = filename.lastIndexOf('.') + 1;
+        let fileExtention = filename.substring(_lastDot, filename.length); // 확장자 추출
+
+        // 이미지 확장자 검증
+        let pictureExtentions = ['jpg', 'png', 'gif'];
+        if(pictureExtentions.includes(fileExtention)) {
+          console.log('해당 확장자는 이미지 파일입니다.')
+          reader.readAsDataURL(file); // reader.onload 실행
+        } else {
+          console.log('해당 파일은 이미지가 아닙니다.');
+          imageDiv.src = "";
+          return;
+
+        }
+        
+        // FileReader의 readAsDataURL()가 정상적으로 파일을 읽었을 때 동작함.
+        reader.onload = function(event) {
+          const imageItem = event.target.result;
+          const fileName = "new_image." + fileExtention;
+		  saveImageAjaxRequest(imageItem, fileName);          
+        }
+
+      }
+
+      
+      // 사진 base64String 문자열을 받아서 새로운 파일 이름으로 이미지 저장 ajax 요청
+      function saveImageAjaxRequest(imageData, fileName) {
+        // ajax를 사용하여 사진 데이터를 저장
+        const formData = {
+        		imageData: imageData,
+        		fileName: fileName,
+        };
+        
+        $.ajax({
+        	url: '/image/saveImage',
+        	type: 'POST',
+        	data: JSON.stringify(formData),
+        	contentType: 'application/json',
+        	success: function(response) {
+        		const message = response;
+        		console.log(message);
+        	},
+        	error: function(xhr, status, error) {
+        		console.error('ajax 요청 실패: ', error);
+        	}
+        });
+        
+      }
+      
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+
+ @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap');
+ 
+body, header {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+body {
+	background-color: white;
+}
+
+h4 {
+	color: #000000;
+}
+
+.title{
+	font-family: 'Caprasimo', cursive;
+	font-size: 80px;
+}
+.minitite {
+	color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+	text-align: left;
+	vertical-align: text-middle;
+	font-size: 36px;
+	font-family: Halant;
+	left: 239px;
+	top: 290px;
+	width: 905px;
+	height: 156px;
+	position: absolute;
+	line-height: auto;
+	border-style: hidden;
+	outline: none;
+	font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.labelId {
+	color: #666666;
+	text-align: left;
+	vertical-align: text-middle;
+	font-size: 32px;
+	font-family: Halant;
+	left: 1000px;
+	top: 280px;
+	width: 264px;
+	height: 47px;
+	position: absolute;
+	line-height: auto;
+	border-style: hidden;
+	outline: none;
+}
+
+.labelPwd {
+	color: #666666;
+	text-align: left;
+	vertical-align: text-middle;
+	font-size: 32px;
+	font-family: Halant;
+	left: 1000px;
+	top: 450px;
+	width: 264px;
+	height: 47px;
+	position: absolute;
+	line-height: auto;
+	border-style: hidden;
+	outline: none;
+}
+
+.inputId {
+	background-color: rgba(217, 217, 217, 0);
+	height: 57px;
+	width: 377px;
+	border: none;
+	border-bottom: 1px solid #b8a6a6;
+	top: 350px;
+	left: 1000px;
+	position: absolute;
+	font-size: 20px;
+	outline: none;
+}
+
+.inputPwd {
+	background-color: rgba(217, 217, 217, 0);
+	height: 57px;
+	width: 377px;
+	border: 1px solid #b8a6a6;
+	top: 530px;
+	left: 1000px;
+	position: absolute;
+	font-size: 20px;
+	border: none;
+	border-bottom: 1px solid #b8a6a6;
+	outline: none;
+}
+
+.loginBtn {
+	width: 390px;
+	height: 84px;
+	top: 640px;
+	left: 1000px;
+	position: absolute;
+	text-decoration: none;
+	color: #FFFFFF;
+	font-weight: bold;
+	border: none;
+	background-color: rgba(135, 206, 235, 1);
+	border-width: 10px;
+	border-radius: 40px;
+	font-size: 20px;
+	font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.loginBtn:hover {
+	background-color: #00FF00;
+}
+
+.regBtn {
+	color: #666666;
+	text-align: center;
+	vertical-align: text-middle;
+	font-size: 24px;
+	font-family: Halant;
+	left: 1130px;
+	top: 770px;
+	width: 124px;
+	height: 47px;
+	position: absolute;
+	line-height: auto;
+	text-decoration: underline;
+	border-style: hidden;
+	outline: none;
+	font-family: 'IBM Plex Sans KR', sans-serif;
+	font-weight: bold;
+}
+
+#password::placeholder {
+	font-size: 23px; /* 원하는 크기로 조절하세요 */
+}
+
+#userId::placeholder {
+	font-size: 20px; /* 원하는 크기로 조절하세요 */
+}
+
+#errorMsg {
+	position: absolute;
+	top: 602px;
+	left: 1060px;
+}

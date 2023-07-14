@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300&display=swap');
+
+header, body {
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.mypage-container {
+	width: 70%;
+	margin: 0 auto;
+}
+.title-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+.title {
+    color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+    font-family: Fugaz One;
+    text-align: center;
+	font-size: 96px;
+	text-decoration: none;
+	font-family: 'Caprasimo', cursive;
+}
+
+.loginInfo {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 30px;
+    margin-right: 30px;
+}
+
+.loginUser {
+    color: rgba(102.00000151991844, 102.00000151991844, 102.00000151991844, 1);
+    font-family: Halant;
+	text-decoration: none;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	font-size: 40px;
+}
+
+.logout {
+    color: rgba(102.00000151991844, 102.00000151991844, 102.00000151991844, 1);
+	width: 227px;
+	height: 37px;
+    font-family: Halant;
+	text-decoration: none;
+	text-align: center;
+	font-size: 32px;
+}
+
+.mypage {
+    color: rgba(102.00000151991844, 102.00000151991844, 102.00000151991844, 1);
+	width: 227px;
+	height: 37px;
+    font-family: Halant;
+	text-align: center;
+	text-decoration: none;
+	font-size: 32px;
+	margin-left: 10px;
+}
+
+.line {
+	border: 1px solid #c0c0c0;
+	border-radius: 0;
+	width: 100%;
+	height: 0px;
+}
+
+.box {
+	border: 2px solid #87ceeb;
+	border-radius: 15px;
+	width: 700px;
+	height: 200px;
+	margin-left: 150px;
+	font-family: var(--font-family);
+	font-weight: 400;
+	font-size: 32px;
+	text-align: center;
+	color: #000;
+}
+
+.mypage-container table {
+	width: 100%;
+	table-layout: fixed;
+	margin-top: 20px;
+	border-collapse: collapse;
+}
+
+.categoryreg {
+	background-color: rgba(205, 50, 50, 0.6000000238418579);
+	height: 30px;
+	width: 110px;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	border-radius: 30px;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+}
+
+.카테고리1 {
+	color: #ffffff;
+	text-align: center;
+	font-size: 20px;
+	font-family: Halant;
+	line-height: normal;
+	border-style: hidden;
+	outline: none;
+}
+
+.mypage-container td {
+	text-align: center;
+	padding: 25px;
+	border-top: 2px solid #C0C0C0;
+	border-bottom: 2px solid #C0C0C0;
+	vertical-align: middle;
+}
+
+.mypage-container thead th {
+	border-bottom: 2px solid #C0C0C0;
+	font-weight: bold;
+}
+
+.mypage-container th {
+	font-size: 1.2em;
+	text-align: center;
+	padding: 20px;
+	border-top: 2px solid #C0C0C0;
+	border-bottom: 2px solid #C0C0C0;
+	vertical-align: middle;
+}
+.userModifyButton {
+   padding: 10px 15px;
+   border: none;
+   border-radius: 0.35rem;
+   background-color: #87ceeb;
+   color: #fff;
+   font-weight: bold;
+   cursor: pointer;
+}
+
+.userModifyButton:hover {
+   background-color: #00FF00;
+}
+
+/* 열 비율 수정 */
+.mypage-container td:nth-child(1), .content-container th:nth-child(1) {
+	width: 1%;
+}
+
+.mypage-container td:nth-child(2), .content-container th:nth-child(2) {
+	width: 3%;
+}
+
+.mypage-container td:nth-child(3), .content-container th:nth-child(3) {
+	width: 10%;
+}
+
+.mypage-container td:nth-child(4), .content-container th:nth-child(4) {
+	width: 10%;
+}
+
+.mypage-container td:nth-child(5), .content-container th:nth-child(5) {
+	width: 1.5%;
+}
+
+.mypage-container td:nth-child(6), .content-container th:nth-child(6) {
+	width: 1.5%;
+}
+
+.mypage-container td:nth-child(7), .content-container th:nth-child(7) {
+	width: 1.5%;
+}
+

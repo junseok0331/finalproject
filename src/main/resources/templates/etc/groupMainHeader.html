@@ -1,0 +1,31 @@
+<header>
+		<div class="header-container">
+	        <h1 class="header-title">[[${group.groupName}]]</h1>
+			<div class="category-buttons">
+				<button class="category-button" onclick="">홈</button>
+				<button class="category-button" onclick="">게시판</button>
+				<button class="category-button" onclick="">사진첩</button>
+				<button class="category-button" onclick="">채팅</button>
+			</div>
+		</div>
+		<!-- DOM이 모두 로드 되었을 때 -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+// 	    		var groupNo = document.getElementById('groupNo').value;
+	    		var buttons = document.getElementsByClassName('category-button');
+	    		var groupNo = "[[${groupNo}]]";
+	    		/* 위에 에러 마커가 뜨는 부분은 신경쓰지 않아도 됩니다. 창을 닫으면 없어짐 */
+	    		/* 
+	    			var groupNo = [[${groupNo}]];
+	    		
+	    			<script> 태그의 속성으로 th:inline="javascript" 속성을 입력하면
+	    			위의 형태로 MODEL 객체에 addAttribute 로 추가한 데이터를 읽어들일 수 있다.
+	    		*/
+	    		buttons[0].setAttribute("onclick", "location.href='/group/groupMain?groupNo=" + groupNo + "'"); // 홈
+	    		buttons[1].setAttribute("onclick", "location.href='/board/boardList?groupNo=" + groupNo + "'"); // 게시판
+	    		buttons[2].setAttribute("onclick", "location.href='/photo/photoList?groupNo=" + groupNo + "'"); // 사진첩
+	    		buttons[3].setAttribute("onclick", "location.href='/group/chatList?groupNo=" + groupNo + "'"); // 채팅
+			});
+		</script>
+</header>

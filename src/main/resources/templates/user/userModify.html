@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+   <title>회원수정</title>
+</head>
+
+<style>
+h4 {
+   color: #000000;
+}
+
+.minitite {
+   color: rgba(135.00000715255737, 206.0000029206276, 235.0000011920929, 1);
+   text-align: left;
+   vertical-align: text-middle;
+   font-size: 36px;
+   font-family: Halant;
+   left: 239px;
+   top: 290px;
+   width: 905px;
+   height: 156px;
+   position: absolute;
+   line-height: auto;
+   border-style: hidden;
+   outline: none;
+}
+
+.name {
+   color: #666666;
+   text-align: left;
+   vertical-align: text-middle;
+   font-size: 32px;
+   font-family: Halant;
+   left: 1000px;
+   top: 167px;
+   width: 264px;
+   height: 47px;
+   position: absolute;
+   line-height: auto;
+   border-style: hidden;
+   outline: none;
+}
+
+.nametext {
+   background-color: rgba(217, 217, 217, 0);
+   height: 50px;
+   width: 377px;
+   border: 1px solid #b8a6a6;
+   top: 210px;
+   left: 1000px;
+   position: absolute;
+   border: none;
+   border-bottom: 1px solid #b8a6a6;
+   outline: none;
+   font-size: 20px;
+}
+
+.password {
+   color: #666666;
+   text-align: left;
+   vertical-align: text-middle;
+   font-size: 32px;
+   font-family: Halant;
+   left: 1000px;
+   top: 310px;
+   width: 264px;
+   height: 47px;
+   position: absolute;
+   line-height: auto;
+   border-style: hidden;
+   outline: none;
+}
+
+
+.passwordtext1 {
+   background-color: rgba(217, 217, 217, 0);
+   height: 50px;
+   width: 377px;
+   border: 1px solid #b8a6a6;
+   top: 350px;
+   left: 1000px;
+   position: absolute;
+   border: none;
+   border-bottom: 1px solid #b8a6a6;
+   outline: none;
+}
+
+.passwordtext2 {
+   background-color: rgba(217, 217, 217, 0);
+   height: 50px;
+   width: 377px;
+   border: 1px solid #b8a6a6;
+   top: 400px;
+   left: 1000px;
+   position: absolute;
+   border: none; /* 텍스트 라인을 없애기 위해 기존의 border를 제거합니다 */
+   border-bottom: 1px solid #b8a6a6; /* 텍스트 라인을 없애는 스타일을 적용합니다 */
+}
+
+
+.phone {
+   color: #666666;
+   text-align: left;
+   vertical-align: text-middle;
+   font-size: 32px;
+   font-family: Halant;
+   left: 1000px;
+   top: 480px;
+   width: 264px;
+   height: 47px;
+   position: absolute;
+   line-height: auto;
+   border-style: hidden;
+   outline: none;
+}
+
+.phonetext {
+   background-color: rgba(217, 217, 217, 0);
+   height: 57px;
+   width: 377px;
+   border: 1px solid #b8a6a6;
+   top: 520px;
+   left: 1000px;
+   position: absolute;
+   border: none;
+   border-bottom: 1px solid #b8a6a6;
+   outline: none;
+   font-size: 20px;
+}
+
+.cancel {
+   background-color: rgba(135, 206, 235, 1);
+   color: #fff;
+   border: none;
+   padding: 10px 20px;
+   font-size: 16px;
+   cursor: pointer;
+   position: absolute;
+   top: 620px;
+   left: 1200px;
+   border-width: 10px;
+   border-radius: 40px;
+   border: none;
+   width: 150px; /* Specify the width in pixels or other absolute unit */
+   height: 50px;
+}
+
+.btnSubmit {
+   background-color: rgba(135, 206, 235, 1);
+   color: #fff;
+   border: none;
+   padding: 10px 20px;
+   font-size: 16px;
+   cursor: pointer;
+   position: absolute;
+   top: 620px;
+   left: 1000px;
+   border-width: 10px;
+   border-radius: 40px;
+   border: none;
+   width: 150px; /* Specify the width in pixels or other absolute unit */
+   height: 50px;
+}
+
+#pwdResult {
+   top: 440px;
+   left: 1000px;
+   position: absolute;
+
+}
+
+.errorMsg {
+   
+   color: red;
+}
+
+.okMsg {
+   top: 260px;
+   left: 1000px;
+   position: absolute;
+   color: blue;
+}
+
+.btnSubmit:hover {
+   background-color: #00FF00;
+}
+
+.button:hover {
+   background-color: #00FF00;
+}
+
+.cancel:hover {
+   background-color: #00FF00;
+}
+
+#idResult {
+   top: 260px;
+   left: 1000px;
+   position: absolute;
+}
+
+#pwdResult {
+   top: 440px;
+   left: 1000px;
+   position: absolute;
+
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   $(document).ready(function(){
+       var pwdCheck = 0;
+      
+       // 취소 버튼 클릭 시 "/user/mypage" 페이지로 이동
+       $("#cancel").on('click', function() {
+           window.location.href = '/user/mypage';
+       });
+       
+       // 비밀번호 확인 체크
+       $("input[name='password'], input[name='password2']").on('input',function(e) {
+          var password = $("input[name='password']").val();
+          var password2 = $("input[name='password2']").val();
+          
+          if (password !== password2 || password === "" || password2 === "") {
+             $('#pwdResult').removeClass('okMsg').addClass('errorMsg').text('비밀번호가 일치하지 않습니다.');
+             pwdCheck = 0;
+             disableSubmitButton();
+          } else {
+             if (pwdCheck === 0) {
+                $('#pwdResult').removeClass('errorMsg').addClass('okMsg').text('비밀번호가 일치합니다.');
+                pwdCheck = 1;
+             }
+             enableSubmitButton();
+          }
+       });
+       
+       function disableSubmitButton() {
+           $("#btnSubmit").prop("disabled", true);
+         }
+
+         function enableSubmitButton() {
+           $("#btnSubmit").prop("disabled", false);
+         }
+       
+         function noSpaceForm(obj) {
+             var trimmedValue = obj.value.replace(/\s/g, ''); // 모든 공백을 제거하는 정규식을 사용하여 공백 제거
+             obj.value = trimmedValue; // 공백 제거한 값으로 다시 설정
+         }
+
+         $("#modifyForm").on('submit', function(e) {
+             
+             // 정규식을 사용하여 비밀번호 형식 검증
+             var password = $("input[name='password']").val();
+             //var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+             var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+             if (!passwordRegex.test(password)) {
+                 e.preventDefault(); // 회원가입 폼 제출 막기
+                 alert("비밀번호는 최소 8 자, 하나 이상의 대문자, 하나의 소문자, 하나의 숫자 및 하나의 특수 문자 이상이어야 합니다.");
+                 return;
+             }
+         });
+   });
+
+</script>
+<body>
+        <div class="minitite">
+           <h4>우리집 앞 소모임을 찾는다면?</h4>
+         <h1>RE! crew</h1>
+      </div>
+            <form id="modifyForm" name="modifyForm" th:action="@{/user/userModify}" method="post">
+                <input type="hidden" id="userNo" name="userNo" th:value="${user.userNo}">
+                <input type="hidden" id="userId" name="userId" th:value="${user.userId}">
+                    <label class="name">이름</label>
+                    <input type="text" class="nametext" name="name" th:value="${user.name}" required>
+                    <small class="text-danger" th:errors="${userDTO.name}"></small>
+                
+                    <label class="password">비밀번호</label>
+                    <input type="password" class="passwordtext1" name="password" th:value="${user.password}" required>
+                    <input type="password" class="passwordtext2" name="password2" th:value="${user.password}" required>
+                    <small class="text-danger" th:errors="${userDTO.password}"></small>
+                   <p id="pwdResult"></p>
+                   
+                    <label class="phone">휴대폰</label>
+                    <input type="text" class="phonetext" name="phone" th:value="${user.phone}" required>
+                    <small class="text-danger" th:errors="${userDTO.phone}"></small>
+             
+                  <button type="button" class="cancel" id="cancel">취소</button>
+                   <button type="submit" id="btnSubmit" class="btnSubmit">저장</button>
+            </form>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<link rel="stylesheet" href="/css/main/mainHeader.css">
+    <title>모임 수정 화면</title>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: rgb(178, 235, 244, 0.4);
+        }
+
+        .group-modify-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #groupModForm {
+            width: 45%;
+            box-shadow: 3px 3px 6px rgb(0, 0, 0, 0.6);
+            border-radius: 5px;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .group-modify-container h1 {
+        color: rgb(0, 0, 0, 0.7);
+        padding: 10px;
+        text-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
+        }
+    
+        .group-modify-container form div {
+        margin-bottom: 15px;
+        }
+    
+        .group-modify-container label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        }
+    
+        .group-modify-container input[type="text"],
+        .group-modify-container select {
+        width: 100%;
+        height: 30px;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        }
+    
+        .group-modify-container button[type="submit"], 
+        .group-modify-container button[type="button"] {
+        background-color: rgb(106, 181, 204);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        }
+        #groupDescription {
+        width: 100%;
+        height: 300px;
+        resize: none;
+        }
+    </style>
+</head>
+<body>
+	<div th:replace="~{etc/mainContainer::header}"></div>
+	<div class="group-modify-container">
+		<h1>모임 수정화면</h1>
+		
+	    <form id="groupModForm" th:action="@{/group/groupModify}" method="post">
+	        <input type="hidden" id="groupNo" name="groupNo" th:value="${group.groupNo}">
+	        <input type="hidden" id="userNo" name="userNo" th:value="${session.user.userNo}">
+	        <div>
+	            <label for="groupName">모임명</label>
+	            <input type="text" id="groupName" name="groupName" th:value="${group.groupName}" required>
+	            <small class="text-danger" th:errors="${groupDTO.groupName}"></small>
+	        </div>
+	        
+	        <div>
+	            <label for="groupDescription">모임을 소개하세요</label>
+	            <textarea id="groupDescription" name="groupDescription" th:text="${group.groupDescription}"></textarea>
+	            <small class="text-danger" th:errors="${groupDTO.groupDescription}"></small>
+	        </div>
+	        
+	        <div>
+	            <label for="groupCategoryNo">카테고리</label>
+	            <select id="groupCategoryNo" name="groupCategoryNo" required>
+	                <option th:each="groupCategory : ${groupCategoryList}" th:value="${groupCategory.groupCategoryNo}" th:text="${groupCategory.groupCategoryName}"></option>
+	            </select>
+	            <small class="text-danger" th:errors="${groupDTO.groupCategoryNo}"></small>
+	        </div>
+	        
+	        <div>
+	            <label for="regionNo">지역</label>
+	            <select id="regionNo" name="regionNo" required>
+	                <option th:each="region : ${regionList}" th:value="${region.regionNo}" 
+	                th:text="${region.regionName}"></option>
+	            </select>
+	            <small class="text-danger" th:errors="${groupDTO.regionNo}"></small>
+	        </div>
+	        <div>
+	            <label for="userNo">모임장</label>
+	            <select id="userNo" name="userNo" required>
+	                <option th:each="user : ${userList}" th:value="${user.userNo}" 
+	                th:text="${user.userNo}"></option>
+	            </select>
+	            <small class="text-danger" th:errors="${groupDTO.userNo}"></small>
+	        </div>
+	        
+	        <button type="submit" id="insertButton">저장</button>
+	        <button id="backButton" type="button">돌아가기</button>
+	    </form>
+		</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	
+	// 뒤로가기 버튼을 눌렀을 경우 이전 페이지로 이동
+	backButton.addEventListener('click', () => {
+		history.back();
+	})
+	
+	// 현재 게시판 카테고리를 드롭박스의 기본 값으로 지정해줌
+    var category = "[[${group.groupCategoryNo}]]";
+    var userNo = "[[${group.userNo}]]";
+    var regionNo = "[[${group.regionNo}]]";
+
+    let categoryOptions = document.querySelectorAll('#groupCategoryNo option');
+    for(var i = 0; i < categoryOptions.length; i++) {
+        if(categoryOptions[i].value === category) {
+            categoryOptions[i].setAttribute('selected', 'selected');
+        }
+    }
+
+    let userOptions = document.querySelectorAll('#userNo option');
+    for(var i = 0; i < userOptions.length; i++) {
+        if(userOptions[i].value === userNo) {
+            userOptions[i].setAttribute('selected', 'selected');
+        }
+    }
+
+    let regionOptions = document.querySelectorAll('#regionNo option');
+    for(var i = 0; i < regionOptions.length; i++) {
+        if(regionOptions[i].value === regionNo) {
+            regionOptions[i].setAttribute('selected', 'selected');
+        }
+    }
+	
+	
+    $('#btnSubmit').click(function(event) {
+       event.preventDefault();
+       var groupName = document.getElementById('groupName');
+		var groupDescription = document.getElementById('groupDescription');
+		var groupCategoryNo = document.getElementById('groupCategoryNo');
+		var regionNo = document.getElementById('regionNo');
+		var value; // 검증을 위해 값을 담음
+		
+		if(groupName.value === "" || groupName.value === null) {
+			alert('모임명을 입력하세요.');
+			groupTitle.focus();
+			return;
+		}
+		
+		if(groupDescription.value === "" || groupDescription.value === null) {
+			alert('모임 설명을 입력하세요.');
+			groupDescription.focus();
+			return;
+		}
+		
+		if(groupCategoryNo.value === "" || groupCategoryNo.value === null) {
+			alert('카테고리를 선택해주세요.');
+			groupCategoryNo.focus();
+			return;
+		}
+		
+		if(regionNo.value === "" || regionNo.value === null) {
+			alert('지역을 선택하세요');
+			regionNo.focus();
+			return;
+		}
+        
+/*         if (userNo.trim() === '') {
+            alert('사용자를 선택하세요.');
+            return;
+        } */
+        
+        // submit
+        //this.submit();
+        $('#groupModForm').submit();
+    });
+});
+</script>
+</body>
+</head>
+

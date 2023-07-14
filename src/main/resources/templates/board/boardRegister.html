@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet" href="/css/home.css">
+
+
+<link rel="stylesheet" href="/css/board/boardRegister.css">
+<!-- 새로 추가된 CSS 파일 -->
+<link rel="stylesheet" href="/css/main/mainHeader.css"> 
+<link rel="stylesheet" href="/css/main/groupMainHeader.css">
+
+
+</head>
+<body>
+	<div th:replace="~{etc/mainHeader::header}"></div>
+	<div th:replace="~{etc/groupMainHeader::header}"></div>
+	
+	<br><br>
+
+
+
+
+
+
+	<div class="board-container">
+	<h3>게시글 작성</h3>
+    <div style="border-top: 1px solid #C0C0C0;"></div>
+    <br>
+		<div>
+			<form id="boardForm" name="boardForm" action="/board/boardRegister"
+				th:action="@{/board/boardRegister}" method="post">
+				<input type="text" id="groupNo" name="groupNo" th:value="${group.groupNo}" readonly="readonly">
+					 <input type="text" id="userNo" name="userNo" th:value="${session.user.userNo}" readonly="readonly">
+				<br><br>
+				<div class="form-group">
+					<label for="groupName" class="formLabelText">모임명</label><br> <span
+						th:text="${group.groupName}"
+						style="font-weight: bold; font-size: 20px; margin-top: 5px;"></span>
+
+				</div>
+				
+				<div class="form-group">
+					<label for="boardCategoryNo" class="formLabelText">카테고리</label><br>
+					<!-- 텍스트 가운데 정렬 -->
+					<select class="form-control" id="boardCategoryNo"
+						name="boardCategoryNo">
+						<option value="">-- 카테고리 선택 --</option>
+						<option th:each="boardCategory : ${boardCategoryList}"
+								th:value="${boardCategory.boardCategoryNo}"
+								th:text="${boardCategory.boardCategoryName}"></option>
+					</select> <small class="text-danger" th:errors="${boardDTO.boardCategoryNo}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="boardTitle" class="formLabelText">제목</label><br>
+					 <input type="text" class="form-control" id="boardTitle" name="boardTitle" th:value="${board.boardTitle}" required>
+						 <small class="text-danger" th:errors="${boardDTO.boardTitle}"></small>
+				</div>
+
+				<div class="form-group">
+					<label for="boardContent" class="formLabelText">내용</label><br>
+					
+					<textarea class="form-control" id="boardContent" name="boardContent" th:value="${board.boardContent}"></textarea>
+					<small class="text-danger" th:errors="${boardDTO.boardContent}"></small>
+				</div>
+
+
+               
+				<div class="bodyTab-button" onclick="document.getElementById('boardForm').submit();">
+				    <button type="submit" id="btnSubmit" style="border: none; background-color: transparent; color: white;">저장</button>
+				</div>
+               <br>
+			</form>
+			<div style="text-align: center; margin-top: 10px;">
+                    <a class="cancelBtn"
+						th:href="@{/board/boardList(groupNo = ${group.groupNo})}">뒤로가기</a>
+                </div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 화면의 채팅</title>
+    <link rel="stylesheet" href="/css/main/mainHeader.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/css/main/groupMainHeader.css">
+	<link rel="stylesheet" href="/css/chatList.css">    
+    
+</head>
+<body>
+	<div th:replace="~{etc/mainContainer::header}"></div>
+	<div th:replace="~{etc/groupMainHeader::header}"></div>
+	
+	
+    <div class="chat-container" >
+    <div class="chat-room">
+        <div class="chat-messages">
+          <div class="message-frame">
+            <!-- chatList가 null 인지 확인 -->
+			<div th:if="${chatList != null}">
+				<div th:each="chat : ${chatList}" >
+					<div class="message">
+		              <div class="sender" th:text="${chat.userName}"></div>
+		              <div class="content" th:utext="${chat.chatContent}"></div>
+		            </div>
+				</div> 
+			</div>
+          </div> <!-- end message-frame -->
+        </div>
+        <div class="chat-input">
+	          <textarea id=inputText name="inputText" placeholder="채팅 내용을 입력하세요." ></textarea>
+	          <button id="sendButton" class="send-button">보내기</button>
+        </div>
+        	<div th:if="${session.user != null}">
+        		<input type="hidden" id="userNo" name="userNo" th:value="${session.user.userNo}">
+        	</div>
+        	<input type="hidden" id="groupNo" name="groupNo" th:value="${groupNo}">
+      </div>
+      </div>
+      
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        /* 페이지가 시작될 때 스크롤바를 최하단으로 내려주는 기능 */
+        window.addEventListener('load', function() {
+	        var chatMessages = document.querySelector('.chat-messages');
+	        chatMessages.scrollTop = chatMessages.scrollHeight;
+	        
+	        /* 채팅방에 진입할 시 입력창에 포커스 */
+	        var inputText = document.getElementById('inputText');
+	        inputText.focus();
+	        
+        });
+        
+		/* 개행을 위해서는 Shift + Enter 키를, 
+		   전송을 위해서는 Enter 키를 입력하는 기능 */
+        $('#inputText').on('keydown', function(event) {
+            if(event.shiftKey && event.keyCode === 13) {
+                // 개행만 할 때 쉬프트와 엔터를 같이 누름
+            } else if(event.keyCode === 13) {
+                event.preventDefault();
+                sendFormSubmit();
+            }
+        })
+        
+		/* 전송 버튼을 눌렀을 때 실행되는 구문 */
+		$('#sendButton').on('click', function() {
+			sendFormSubmit();
+		})
+		
+		
+		/* sendForm Ajax request Function */
+		function sendFormSubmit() {
+			var groupNo = document.getElementById('groupNo').value; // 모임 번호
+			var userNo = document.getElementById('userNo').value; // 회원 번호 
+            var inputText = document.getElementById('inputText').value; // 입력된 채팅 내용을 가져옴
+            var formData = {
+            	"groupNo": groupNo,
+            	"userNo": userNo,
+            	"inputText": inputText,
+            };
+            
+			
+            if(inputText.trim() == '') {
+				alert("내용을 입력해주세요.");
+				return;
+			}
+            
+            /* ajax 요청 */
+            $.ajax({
+            	url: '/group/chatList',
+            	type: 'POST',
+            	data: JSON.stringify(formData),
+            	contentType: 'application/json',
+            	success: function(response) {
+					/* ajax 요청 성공 시 채팅 창을 다시 작성함 */
+					var chatList = response;
+					reDesignChatList(chatList);
+            	},
+            	error: function(xhr, status, error) {
+            		console.error('ajax 요청 실패: ', error);
+            	}
+            });
+		}
+		
+		/* ajax 요청으로 채팅 목록을 가져와서 다시 화면에 출력해주는 함수 */
+		function reDesignChatList(data) {
+			const chatList = data;
+			const messageFrame = document.querySelector('.message-frame');
+			const inputText = document.getElementById('inputText');
+			var chatMessages = document.querySelector('.chat-messages');
+			
+			messageFrame.innerHTML = '';
+			
+			// 채팅 목록 최신화
+			for(var chat of chatList) {
+				var messageDiv = document.createElement('div');
+				messageDiv.classList.add('message');
+				
+				// 자식(작성자) 엘리먼트 생성
+				var senderDiv = document.createElement('div');
+				senderDiv.classList.add('sender');
+				senderDiv.textContent = chat.userName;
+				
+				// 자식(내용) 엘리먼트 생성
+				var contentDiv = document.createElement('div');
+				contentDiv.classList.add('content');
+				contentDiv.innerHTML = chat.chatContent;
+				
+				// 부모 엘리먼트에 자식 엘리먼트 연결
+				messageDiv.appendChild(senderDiv);
+				messageDiv.appendChild(contentDiv);
+				
+				// 최상위 엘리먼트에 연결
+				messageFrame.appendChild(messageDiv);
+			} // end for
+			
+			/* 텍스트를 비워주고 포커스, 채팅 목록을 최하단으로 이동 */
+			inputText.value = "";
+			inputText.focus();
+	        chatMessages.scrollTop = chatMessages.scrollHeight;
+		}
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Photo</title>
+    
+    <link rel="stylesheet" href="/css/home.css"> 
+    <link rel="stylesheet" href="/css/groupMainHeader.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/photo/uploadStyle.css}">
+    
+    
+</head>
+<body>
+    <!-- header 태그 내용 -->
+    <div th:replace="~{etc/mainContainer::header}"></div>
+	<div th:replace="~{etc/groupMainHeader::header}"></div>
+    <h1>Upload Photo</h1>
+    <form id="uploadForm" action="/photo/photoUplod" th:action="@{/board/boardRegister}" method="post" enctype="multipart/form-data">
+    	<input type="text" id="userNo" name="userNo" th:value="${session.user.userNo}" readonly> 
+        <div class="info">
+            <label for="photoTitle">Title:</label>
+            <input type="text" id="photoTitle" name="photoTitle" required><br>
+            <label for="photoContent">Content:</label>
+            <textarea id="photoContent" name="photoContent"></textarea><br>
+            <label for="photoFile">Choose Photo:</label>
+            <input type="file" id="photoFile" name="photoFile" accept="image/*" required><br> <!-- 수정된 부분: name 속성을 "photoFile"로 변경 -->
+        </div>
+        <div class="btn_wrap">
+            <button type="submit">Upload</button>
+            <button id="backButton" type="button">돌아가기</button>
+        </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const backButton = document.getElementById('backButton');
+        
+        // 뒤로가기 버튼을 눌렀을 경우 이전 페이지로 이동
+        backButton.addEventListener('click', () => {
+            history.back();
+        });
+        
+        // 폼 전송 시 AJAX를 사용하지 않고 직접 업로드하는 방식으로 변경
+        $('#uploadForm').submit(function(event) {
+            event.preventDefault();
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            var groupNo = "[[${groupNo}]]";
+            var photoNo = "[[${photoNo}]]";
+            var userNo = "[[${userNo}]]";
+            var url = '/photo/uploadPhoto/' + groupNo;
+            
+            // FormData 객체에 필요한 데이터 추가
+            formData.append('groupNo', groupNo);
+            
+            // 업로드 요청 보내기
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // 업로드 성공 시, 사진 리스트에 추가하는 작업 수행
+                    alert('Photo uploaded successfully');
+                    window.location.href = '/photo/photoList?groupNo=' + groupNo;
+                },
+                error: function(xhr, status, error) {
+                    // 오류 처리
+                    if (xhr.status === 400) {
+                        alert('Bad Request: Invalid file or missing required data');
+                    } else {
+                        alert('Error uploading photo: ' + error);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

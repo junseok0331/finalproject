@@ -1,0 +1,89 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>게시글 수정</title>
+<link rel="stylesheet" href="/css/main/mainHeader.css"> 
+<link rel="stylesheet" href="/css/board/boardRegister.css">
+</head>
+<body>
+<div th:replace="~{etc/mainHeader::header}"></div>
+
+    <div class="board-container">
+    <h3>게시글 수정</h3>
+    <div style="border-top: 1px solid #C0C0C0;"></div>
+     <br><br>
+     <br>
+        <div>
+            <form id="boardForm" name="boardForm" th:action="@{/board/boardModify}" method="post">
+                <input type="hidden" id="boardNo" name="boardNo" th:value="${board.boardNo}">
+                 <div class="form-group">
+                    <label for="boardCategoryNo">게시판 카테고리</label>
+                    <select class="form-control" id="boardCategoryNo" name="boardCategoryNo">
+                        <option th:each="boardCategory : ${boardCategoryList}" th:value="${boardCategory.boardCategoryNo}" 
+                        		th:text="${boardCategory.boardCategoryName}"></option>
+                    </select>
+                    <small class="text-danger" th:errors="${boardDTO.boardCategoryNo}"></small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="boardTitle">제목</label>
+                    <input type="text" class="form-control" id="boardTitle" name="boardTitle" th:value="${board.boardTitle}" required>
+                    <small class="text-danger" th:errors="${boardDTO.boardTitle}"></small>
+                </div>
+                <div class="form-group">
+				    <label for="boardContent">내용</label>
+				    <textarea class="form-control" id="boardContent" name="boardContent" th:text="${board.boardContent}" style="vertical-align: top; height: 300px; resize: vertical;" required></textarea>
+				    <small class="text-danger" th:errors="${boardDTO.boardContent}"></small>
+				</div>
+               
+                
+				<div class="bodyTab-button" onclick="document.getElementById('boardForm').submit();">
+				    <button type="submit" id="btnSubmit" style="border: none; background-color: transparent; color: white;">저장</button>
+				</div>
+				<br>
+				<div style="text-align: center; margin-top: 10px;">
+				<a class="cancelBtn" th:href="@{/board/boardRead(boardNo = ${board.boardNo})}">뒤로가기</a>
+				</div>
+                
+            </form>
+        </div>
+    </div>
+    </body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+	
+	// 현제 게시판 카테고리를 드롭박스의 기본 값으로 지정해줌
+	var category = "[[${board.boardCategoryName}]]";
+	console.log(category);
+	let options = document.querySelectorAll('option');
+	for(var i=0; i<options.length; i++) {
+		if(options[i].innerText === category) {
+			options[i].setAttribute('selected', 'selected');
+		}
+	}
+	
+    $('#btnSubmit').click(function(event) {
+        event.preventDefault();
+        var boardTitle = $('#boardTitle').val();
+        var boardContent = $('#boardContent').val();
+//         var categorySelector = document.getElementById('categorySelector');
+//         var categoryOptions = document.querySelectorAll('#categoryOption');
+//         console.log(categoryOptions[categorySelector.selectedIndex].value);
+//         return;
+        
+        if (boardTitle.trim() === '') {
+            alert('제목을 입력하세요.');
+            return;
+        }
+        
+        if (boardContent.trim() === '') {
+            alert('내용을 입력하세요.');
+            return;
+        }        
+        $('#boardForm').submit();
+    });
+});
+</script>
