@@ -245,7 +245,7 @@ body {
  	  		let filename = file.name;
 	  		
  	  		let lastDot = filename.lastIndexOf('.') + 1;
- 	  		let fileExtension = filename.substring(lastDot, filename.length);
+ 	  		let fileExtension = filename.substring(lastDot, filename.length).toLowerCase();
 	  		
  	  		// 이미지 확장자 검증
  	  		let pictureExtensions = ['jpg', 'png', 'gif', 'jpeg'];
