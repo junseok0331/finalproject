@@ -44,7 +44,7 @@ public class UserController {
 	
 	@GetMapping("/login")
 	public String loginForm(Model model) {
-		return "/user/loginForm";
+		return "user/loginForm";
 	}
 	
 	@PostMapping("/login")
